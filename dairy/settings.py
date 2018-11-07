@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dairyapp.apps.DairyappConfig',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +55,7 @@ ROOT_URLCONF = 'dairy.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['./templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,4 +122,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 ##path for static files
-STATIC_ROOT=os.path.join(BASE_DIR,'static')
+STATICFILES_DIRS=[
+    os.path.join(BASE_DIR,'static'),
+]

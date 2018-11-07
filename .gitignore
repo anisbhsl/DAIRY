@@ -4,5 +4,6 @@ db.sqlite3
 #IDE
 .idea/
 .git/
-.dairy/__pycache__/
 
+# Byte compiled files
+__pycache__/
