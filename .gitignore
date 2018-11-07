@@ -1,0 +1,8 @@
+#Database
+db.sqlite3
+
+#IDE
+.idea/
+.git/
+.dairy/__pycache__/
+
