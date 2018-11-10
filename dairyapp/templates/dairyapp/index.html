@@ -33,9 +33,67 @@
     <div class="row">
         <div class="col-lg-12">
             <h1>TOTAL SALES ACTIVITY</h1>
+            <div id="graphcontainer" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
         </div>
 
 
     </div>
 
+{% endblock %}
+{% block extra-js %}
+    <script src="{% static 'js/highcharts.js' %}"></script>
+    <script>
+    Highcharts.chart('graphcontainer', {
+    chart: {
+        type: 'area',
+        spacingBottom: 30
+    },
+    title: {
+        text: 'Sales Activity'
+    },
+
+    legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 100,
+        y: 70,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+    },
+    xAxis: {
+        categories: ['Baisakh', 'Jestha', 'Ashad', 'Shrawan', 'Bhadra', 'Ashoj', 'Kartik', 'Mangsir',
+            'Poush','Magh','Falgun','Chaitra']
+    },
+    yAxis: {
+        title: {
+            text: 'Amount in 1k'
+        },
+        labels: {
+            formatter: function () {
+                return this.value;
+            }
+        }
+    },
+    tooltip: {
+        formatter: function () {
+            return '<b>' + this.series.name + '</b><br/>' +
+                this.x + ': ' + this.y;
+        }
+    },
+    plotOptions: {
+        area: {
+            fillOpacity: 0.5
+        }
+    },
+    credits: {
+        enabled: false
+    },
+    series: [{
+        name: 'Total Sales',
+        data: [56, 102, 49, 88, 77, 75, 93, 107,59,85,80,86]
+    }]
+});
+    </script>
 {% endblock %}
