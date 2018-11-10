@@ -27,7 +27,10 @@
     <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery-ui-1.9.2.custom.min.js' %}"></script>
 
+    {% block extra-css %}
 
+
+    {% endblock %}
 
     <title>{{ title }}</title>
 </head>
@@ -40,7 +43,15 @@
 
 
           <!--logo start-->
-          <a href="#" class="logo">DAIRY RECORD MANAGEMENT AND PRODUCTION DATA ANALYTICS SYSTEM</a>
+          <div class="row">
+              <div class="col-lg-8">
+                   <a href="#" class="logo">DAIRY RECORD MANAGEMENT AND PRODUCTION DATA ANALYTICS SYSTEM</a>
+              </div>
+               <div class="col-lg-4">
+                      <h3>आजको मिती: </h3>
+              </div>
+          </div>
+
           <!--logo end-->
 
 
@@ -68,7 +79,7 @@
               </li>
 
               <li class="active">
-                <a class="" href="#">
+                <a class="" href="{% url 'dairyapp:milk-purchase' %}">
                       <i class="fa-signal"></i>
                       <span>Purchase खरिद</span>
                   </a>
@@ -154,6 +165,7 @@
         <section id="main-content">
             <section class="wrapper">
                 {% block main-content %}
+                    
                 {% endblock %}
             </section>
         </section>

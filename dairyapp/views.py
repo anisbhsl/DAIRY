@@ -7,3 +7,10 @@ def index(request):
     }
     return render(request,'dairyapp/index.html',context)
 
+def milkpurchase(request):
+    title='Buy Milk'
+    context={
+        'title':title
+    }
+
+    return render(request,'dairyapp/milk-purchase.html',context)
