@@ -14,3 +14,4 @@ def milkpurchase(request):
     }
 
     return render(request,'dairyapp/milk-purchase.html',context)
+
