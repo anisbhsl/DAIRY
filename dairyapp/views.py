@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from .forms import mPurchaseForm
+from .models import mPurchase
+from django.shortcuts import render, redirect, get_object_or_404
 
 def index(request):
     title='DAIRY'
@@ -9,10 +12,32 @@ def index(request):
 
 def milkPurchase(request):
     title='Buy Milk'
-    context={
-        'title':title
-    }
 
+
+
+
+    if request.method=='POST':
+        form=mPurchaseForm(request.POST)
+        if form.is_valid():
+            milk = get_object_or_404(mPurchase)
+            milk=mPurchase(
+                seller=form.cleaned_data.get('seller'),
+                mPurchase_product=cleaned_data.get('mPurchase_product'),
+                mPurchase_qty = cleaned_data.get('mPurchase_qty'),
+                mPurchase_rate = cleaned_data.get('mPurchase_rate')
+            )
+            milk.save()
+
+            return redirect('dairyapp/milk-purchase.html')
+            
+
+    else:
+        form=mPurchaseForm()
+
+    context = {
+        'title': title,
+        'form': form
+    }
     return render(request,'dairyapp/milk-purchase.html',context)
 
 def addMilkProducts(request):
