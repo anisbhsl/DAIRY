@@ -56,7 +56,6 @@ class mPurchase(models.Model):
 
     mPurchase_id=models.AutoField(primary_key=True)
     seller=models.CharField(max_length=50)
-    ## automatically set the field to now when object is created
     mPurchase_date=models.DateTimeField(default=timezone.now)
     mPurchase_product=models.CharField(max_length=10,choices=MILK_CHOICES)
     mPurchase_qty=models.FloatField()

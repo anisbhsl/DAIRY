@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dairyapp.apps.DairyappConfig',
     'widget_tweaks',
+
 ]
 
 MIDDLEWARE = [

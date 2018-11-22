@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from .forms import mPurchaseForm
 from .models import mPurchase
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.urls import reverse
+from django.utils import timezone
 
 def index(request):
     title='DAIRY'
@@ -12,32 +15,28 @@ def index(request):
 
 def milkPurchase(request):
     title='Buy Milk'
-
-
-
+    milk = mPurchase.objects.all()
 
     if request.method=='POST':
         form=mPurchaseForm(request.POST)
         if form.is_valid():
-            milk = get_object_or_404(mPurchase)
-            milk=mPurchase(
-                seller=form.cleaned_data.get('seller'),
-                mPurchase_product=cleaned_data.get('mPurchase_product'),
-                mPurchase_qty = cleaned_data.get('mPurchase_qty'),
-                mPurchase_rate = cleaned_data.get('mPurchase_rate')
-            )
-            milk.save()
-
-            return redirect('dairyapp/milk-purchase.html')
-            
+            m=form.save(commit=False)
+            ## gives object bound to form
+            ## commit = False means it gives object that has not been saved in db yet
+            m.mPurchase_date=timezone.now()
+            m.save()
+            return redirect('/milkpurchase')
 
     else:
         form=mPurchaseForm()
 
     context = {
         'title': title,
-        'form': form
+        'form': form,
+        'milk': milk
+
     }
+
     return render(request,'dairyapp/milk-purchase.html',context)
 
 def addMilkProducts(request):

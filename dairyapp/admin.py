@@ -7,3 +7,4 @@ from .models import *
 admin.site.register(mProduct)
 # Feeder Products
 admin.site.register(feederProduct)
+admin.site.register(mPurchase)
