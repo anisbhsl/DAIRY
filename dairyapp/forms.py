@@ -28,7 +28,7 @@ class mPurchaseForm(forms.ModelForm):
     )
 
     mPurchase_rate=forms.FloatField(
-        label='Rate',
+        label='Rate/Ltr',
         help_text="The rate should be in numeric format",
     )
 

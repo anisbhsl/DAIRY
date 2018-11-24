@@ -1,11 +1,10 @@
 from django.shortcuts import render
 from .forms import mPurchaseForm
 from .models import mPurchase
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.urls import reverse
+from django.shortcuts import render, redirect
 from django.utils import timezone
 import datetime
+
 
 def index(request):
     title='DAIRY'
@@ -16,7 +15,7 @@ def index(request):
 
 def milkPurchase(request):
     title='Buy Milk'
-    milk = mPurchase.objects.all()
+    milk = mPurchase.objects.all().order_by('-mPurchase_date')
 
     if request.method=='POST':
         form=mPurchaseForm(request.POST)
@@ -24,7 +23,7 @@ def milkPurchase(request):
             m=form.save(commit=False)
             ## gives object bound to form
             ## commit = False means it gives object that has not been saved in db yet
-            m.mPurchase_date=timezone.now() ##returns only the date
+            m.mPurchase_date=timezone.now()
             m.mPurchase_total=m.mPurchase_qty*m.mPurchase_rate
             m.save()
             return redirect('/milkpurchase')

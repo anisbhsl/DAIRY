@@ -67,6 +67,10 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'dairyapp.sendBS.sendBS',
             ],
+            ## registering a template tag
+            'libraries':{
+                'dateconvert_tags':'dairyapp.templatetags.dateconvert_tags',
+            }
         },
     },
 ]
@@ -117,7 +121,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False ##setting this to false stores datetime in localtimezone
 
 
 # Static files (CSS, JavaScript, Images)
