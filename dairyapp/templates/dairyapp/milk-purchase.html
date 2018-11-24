@@ -12,22 +12,67 @@
 
 {% endblock %}
 {% block main-content %}
-    <div class="row myfont">
+    {% load widget_tweaks %}
+    <div class="row myfont" style="padding-left: 15px;">
         <div class="col-lg-4">
             <h2>Buy Milk दुध खरिद</h2>
 
             <form class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+
+                {{ form.non_field_errors }}
+
+                {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field.errors }}
+                    {{ hidden_field }}
+                {% endfor %}
+
+                {% for field in form %}
+
+                    <div class="form-group">
+
+                        {{ field.label_tag }}
+                        {% if form.is_bound %}
+                            {% if field.errors %}
+
+                                {% render_field field class="form-control is-invalid" %}
+
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback">
+                                         {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            {% else %}
+                                   {% render_field field class="form-control is-valid" %}
+                            {% endif %}
+
+                        {% else %}
+                               {% render_field field class="form-control" %}
+                        {% endif %}
+
+                    {% if field.help_text %}
+
+                        <small class="form-text text-primary">{{ field.help_text }}</small>
+                    {% endif %}
+
+                    </div>
+                {% endfor %}
+
+
+
                 <div class="form-group">
-                    {{ form.as_table }}
-                    <input type="submit" value="OK">
-                </div>
+                    <div class="col-sm-12">
+                         <button type="submit" class="btn btn-primary btn-block"><strong>Add to Purchase</strong></button>
+                    </div>
+                 </div>
+
             </form>
 
         </div>
 
         <div class="col-lg-8">
-            <h2>Today's Milk Purchase आजको दुध खरिद</h2>
+            <h2>Showing Latest Milk Purchase  दुध खरिद</h2>
 
 
             <!-- Milk Purchase list for today -->
@@ -35,7 +80,7 @@
               <table class="table table-striped table-hover">
                 <thead>
                   <tr class="info">
-                    <th>#</th>
+                    <th>Date</th>
                     <th>Seller</th>
 
                     <th>Milk Type</th>
@@ -53,49 +98,15 @@
                     <td>59</td>
                     <td>2065</td>
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Argha Krishak Samuha</td>
-                    <td>Buffalo</td>
-                    <td>30</td>
-                    <td>55</td>
-                    <td>1650</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>XYZ Krishak Samuha</td>
-                    <td>Buffalo</td>
-                    <td>30</td>
-                    <td>55</td>
-                    <td>1650</td>
-                  </tr>
-
-                  <tr>
-                    <td>4</td>
-                    <td>Nepal Krishak Samuha</td>
-                    <td>Buffalo</td>
-                    <td>30</td>
-                    <td>55</td>
-                    <td>1650</td>
-                  </tr>
-
-                  <tr>
-                    <td>5</td>
-                    <td>Naya Krishak Samuha</td>
-                    <td>Buffalo</td>
-                    <td>30</td>
-                    <td>55</td>
-                    <td>1650</td>
-                  </tr>
 
                 {% for purchase in milk %}
                     <tr>
-                        <td>#</td>
+                        <td>{{purchase.mPurchase_date }}</td>
                         <td>{{purchase.seller  }}</td>
                         <td>{{purchase.mPurchase_product}}</td>
                         <td>{{purchase.mPurchase_qty}}</td>
                         <td>{{purchase.mPurchase_rate}}</td>
-                        <td></td>
+                        <td>{{ purchase.mPurchase_total }}</td>
                     </tr>
 
                 {% endfor %}

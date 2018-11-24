@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRe
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.urls import reverse
 from django.utils import timezone
+import datetime
 
 def index(request):
     title='DAIRY'
@@ -23,7 +24,8 @@ def milkPurchase(request):
             m=form.save(commit=False)
             ## gives object bound to form
             ## commit = False means it gives object that has not been saved in db yet
-            m.mPurchase_date=timezone.now()
+            m.mPurchase_date=timezone.now() ##returns only the date
+            m.mPurchase_total=m.mPurchase_qty*m.mPurchase_rate
             m.save()
             return redirect('/milkpurchase')
 
@@ -38,7 +40,6 @@ def milkPurchase(request):
     }
 
     return render(request,'dairyapp/milk-purchase.html',context)
-
 def addMilkProducts(request):
     title='Add Milk Products'
     context={
