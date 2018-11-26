@@ -15,27 +15,37 @@ class Customer(models.Model):
     def __str__(self):
         return self.customer_name
 
+
+## Milk Product Units
+class mProductUnit(models.Model):
+    mProductUnit_id=models.AutoField(primary_key=True)
+    mProductUnit_name=models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.mProductUnit_name
+
 ## Milk Products
 class mProduct(models.Model):
-    KILOGRAM='kg.'
-    LITER='ltr'
-    PACKET='pkt'
-
-    MILK_PRODUCTS_UNIT_CHOICES=(
-        (KILOGRAM,'Kilogram'),
-        (LITER,'Liter'),
-        (PACKET,'Packet'),
-    )
+    # KILOGRAM='kg.'
+    # LITER='ltr'
+    # PACKET='pkt'
+    #
+    # MILK_PRODUCTS_UNIT_CHOICES=(
+    #     (KILOGRAM,'Kilogram'),
+    #     (LITER,'Liter'),
+    #     (PACKET,'Packet'),
+    # )
 
     mProduct_id=models.AutoField(primary_key=True)
     mProduct_name=models.CharField(max_length=50)
-    #mProduct_qty=models.FloatField()
-    mProduct_qtyunit=models.CharField(max_length=3,choices=MILK_PRODUCTS_UNIT_CHOICES,default=LITER)  ##unit type eg. ltr, kg, ml
-    #mProduct_rate=models.FloatField()
+    mProduct_qtyunit = models.ForeignKey(mProductUnit,on_delete=models.CASCADE) #Product Unit has one to many relationship with mProduct
+    mProduct_qty=models.FloatField(default=0) ##current stock
+    #mProduct_qtyunit=models.CharField(max_length=3,choices=MILK_PRODUCTS_UNIT_CHOICES,default=LITER)  ##unit type eg. ltr, kg, ml
+
 
 
     def __str__(self):
-        return self.product_name
+        return self.mProduct_name
 
     def mProductUnit(self):
         return self.mProduct_qtyunit
@@ -66,10 +76,10 @@ class mPurchase(models.Model):
     def __str__(self):
         return self.seller
 
-## Dairy Stock
+## Dairy Stock Add
 class mStock(models.Model):
     mStock_id=models.AutoField(primary_key=True)
-    mProduct=models.OneToOneField(mProduct,on_delete=models.CASCADE)
+    mStock_product=models.ForeignKey(mProduct,on_delete=models.CASCADE)
     mStock_qty=models.FloatField()
 
     # try to access unit using mProduct.mProduct_qtyunit

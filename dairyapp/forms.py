@@ -1,5 +1,5 @@
 from django import forms
-from .models import mPurchase
+from .models import mProduct,mPurchase, mStock
 from dairyapp.choices import MILK_CHOICES
 
 class mPurchaseForm(forms.ModelForm):
@@ -37,4 +37,23 @@ class mPurchaseForm(forms.ModelForm):
         fields=('seller','mPurchase_product','mPurchase_qty','mPurchase_rate',)
 
 
+class mStockForm(forms.ModelForm):
+    """
+        This form is for adding milk product stock
+    """
 
+    mStock_product = forms.ModelChoiceField(
+        queryset=mProduct.objects.filter(),
+        label='Select Milk Product',
+        help_text="Choose from the list of milk products",
+        required=True,
+
+    )
+    mStock_qty = forms.FloatField(
+        label='Quantity',
+        help_text='Enter stock quantity',
+    )
+
+    class Meta:
+        model=mStock
+        fields=('mStock_product','mStock_qty',)

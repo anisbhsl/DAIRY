@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .forms import mPurchaseForm
-from .models import mPurchase
-from django.shortcuts import render, redirect
+from .forms import mPurchaseForm,mStockForm
+from .models import mPurchase,mProduct
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 import datetime
 
@@ -41,8 +41,34 @@ def milkPurchase(request):
     return render(request,'dairyapp/milk-purchase.html',context)
 def addMilkProducts(request):
     title='Add Milk Products'
+    product=mProduct.objects.all().order_by('-mProduct_name')
+
+    if request.method=='POST':
+        form=mStockForm(request.POST)
+        if form.is_valid():
+            m=form.save(commit=False)
+
+            ## gives object bound to form
+            ## commit = False means it gives object that has not been saved in db yet
+            mProduct_name=form.cleaned_data.get('mStock_product')
+
+            p=get_object_or_404(mProduct,mProduct_name=mProduct_name)
+            print(p)
+            print("printing...................")
+            qty=form.cleaned_data.get('mStock_qty')
+            p.mProduct_qty=p.mProduct_qty+qty  ##update stock
+
+            p.save()
+            m.save()
+
+            return redirect('/addmilkproducts')
+
+    else:
+        form=mStockForm()
     context={
-        'title':title
+        'title':title,
+        'product':product,
+        'form':form,
     }
     return render(request,'dairyapp/add-milk-products.html',context)
 
