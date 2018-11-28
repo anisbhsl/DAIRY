@@ -47,8 +47,7 @@ class mProduct(models.Model):
     def __str__(self):
         return self.mProduct_name
 
-    def mProductUnit(self):
-        return self.mProduct_qtyunit
+
 
 
 # Feeder Product
@@ -79,6 +78,7 @@ class mPurchase(models.Model):
 ## Dairy Stock Add
 class mStock(models.Model):
     mStock_id=models.AutoField(primary_key=True)
+    mStock_date=models.DateTimeField(default=timezone.now)
     mStock_product=models.ForeignKey(mProduct,on_delete=models.CASCADE)
     mStock_qty=models.FloatField()
 

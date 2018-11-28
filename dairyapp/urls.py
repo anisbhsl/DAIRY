@@ -8,4 +8,6 @@ urlpatterns=[
     path('milkpurchase/',views.milkPurchase,name='milk-purchase'),
     path('addmilkproducts/',views.addMilkProducts,name='add-milk-products'),
     path('sellmilkproducts/',views.sellMilkProducts,name='sell-milk-products'),
+    path('stockrecords/<id>',views.mStockDetailView,name='stock-detail'),
+
 ]

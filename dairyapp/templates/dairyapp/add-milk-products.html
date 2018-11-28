@@ -4,6 +4,13 @@
 {% load widget_tweaks %}
 
 {% block extra-css %}
+    <style>
+        tr:hover{
+            cursor: pointer;
+            color: #1b6d85;
+            font-weight: bolder;
+        }
+    </style>
 
 
 {% endblock %}
@@ -81,7 +88,7 @@
         <div class="col-lg-offset-1 col-lg-6">
             <div class="row">
                 <h2><strong>Stock Products</strong></h2>
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover table-responsive ">
                     <thead>
                       <tr class="info">
 
@@ -91,16 +98,19 @@
                       </tr>
                     </thead>
                     <tbody class="active">
-                    {% for p in product %}
-                      <tr>
-                        <td>{{p.mProduct_name}}</td>
-                        <td>{{p.mProduct_qty}}         {{ p.mProduct_qtyunit }}</td>
 
-                      </tr>
+                    {% for p in product %}
+
+                          <tr class="clickable-row bg-danger" data-href="{% url 'dairyapp:stock-detail' id=p.mProduct_id %}">
+                              <td>{{p.mProduct_name}}</td>
+                            <td>{{p.mProduct_qty}}  {{ p.mProduct_qtyunit }}</td>
+                          </tr>
+
                     {% endfor %}
 
                     </tbody>
                 </table>
+                <p class="text-success">Click on products to see logs (हरेक सामनको स्टक रेकर्ड हेर्न उक्त उत्पादनमा क्लिक गर्नुहोस्)</p>
             </div>
 
 
@@ -110,6 +120,16 @@
 {% endblock %}
 
 {% block extra-js %}
+    <script>
+
+           $(document).ready(function(){
+               $('.clickable-row').click(function () {
+                   window.location=$(this).data('href');
+               });
+           });
+
+    </script>
+
 
 
 {% endblock %}

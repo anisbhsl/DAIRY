@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from .forms import mPurchaseForm,mStockForm
-from .models import mPurchase,mProduct
+from .models import mPurchase,mProduct,mStock
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-import datetime
+from django.views.generic import DetailView
 
 
 def index(request):
@@ -39,6 +39,9 @@ def milkPurchase(request):
     }
 
     return render(request,'dairyapp/milk-purchase.html',context)
+
+
+### stock add
 def addMilkProducts(request):
     title='Add Milk Products'
     product=mProduct.objects.all().order_by('-mProduct_name')
@@ -47,14 +50,11 @@ def addMilkProducts(request):
         form=mStockForm(request.POST)
         if form.is_valid():
             m=form.save(commit=False)
-
             ## gives object bound to form
             ## commit = False means it gives object that has not been saved in db yet
             mProduct_name=form.cleaned_data.get('mStock_product')
-
+            m.mStock_date=timezone.now()
             p=get_object_or_404(mProduct,mProduct_name=mProduct_name)
-            print(p)
-            print("printing...................")
             qty=form.cleaned_data.get('mStock_qty')
             p.mProduct_qty=p.mProduct_qty+qty  ##update stock
 
@@ -71,6 +71,18 @@ def addMilkProducts(request):
         'form':form,
     }
     return render(request,'dairyapp/add-milk-products.html',context)
+
+## Detail view for stock records
+def mStockDetailView(request,id):
+    model=mStock
+    m=get_object_or_404(mProduct,mProduct_id=id)
+    stock=mStock.objects.filter(mStock_product=m.mProduct_id).order_by('-mStock_date')
+    context={
+        'm':m,
+        'stock':stock,
+    }
+
+    return render(request,'dairyapp/stock-details.html',context)
 
 def sellMilkProducts(request):
     title='Sell Milk Products'

@@ -10,6 +10,11 @@
 
 
         }
+
+        tr:hover{
+
+            font-weight: bolder;
+        }
     </style>
 
 {% endblock %}
@@ -89,9 +94,9 @@
 
             <!-- Milk Purchase list for today -->
             <div class="table-responsive">
-              <table class="table table-striped table-hover">
+              <table class="table table-striped table-hover table-responsive">
                 <thead>
-                  <tr class="info">
+                  <tr class="bg-success">
                     <th>Date</th>
                     <th>Seller</th>
 
@@ -99,6 +104,7 @@
                     <th>QTY (ltr)</th>
                     <th>Rate</th>
                     <th>Total Amount (NRs)</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody class="active">
@@ -114,6 +120,7 @@
                             <td>{{purchase.mPurchase_qty}}</td>
                             <td>{{purchase.mPurchase_rate}}</td>
                             <td>{{ purchase.mPurchase_total }}</td>
+                            <td><button class="btn btn-success"><i class="fa fa-times"></i></button></td>
                         </tr>
 
                     {% endfor %}

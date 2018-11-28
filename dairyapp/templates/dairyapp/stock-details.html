@@ -1,0 +1,59 @@
+{% extends 'dairyapp/base.html' %}
+{% load dateconvert_tags %}
+{% load static %}
+
+<!-- This HTML section shows logs of stock records -->
+
+{% block extra-css %}
+
+
+{% endblock %}
+
+{% block main-content %}
+    <div class="row">
+
+        <div class="col-lg-5">
+            <h2><strong>Stock Logs</strong></h2>
+
+            <table class="table table-striped table-hover">
+                    <thead>
+                      <tr class="info">
+                        <th>Date</th>
+                        <th>Product</th>
+                        <th>Quantity Added</th>
+                        <th>Actions</th>
+
+                      </tr>
+                    </thead>
+                    <tbody class="active">
+                    {% for s in stock %}
+                      <tr>
+                        <td>{% bsconverter s.mStock_date %} </td>
+                        <td>{{ s.mStock_product }}</td>
+                        <td>{{ s.mStock_qty }} {{ m.mProduct_qtyunit }}</td>
+                        <td>
+                            <button class="btn btn-success btn-block">
+                                <strong>Delete</strong>
+                            </button>
+                        </td>
+
+                      </tr>
+                    {% endfor %}
+
+                    </tbody>
+            </table>
+        </div>
+        <div class="col-lg-7">
+            <!-- This section shows production vs time analytics graph -->
+            <h2><strong>Analytics (Production vs Time Graph)</strong></h2>
+
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block extra-js %}
+
+
+{% endblock %}
