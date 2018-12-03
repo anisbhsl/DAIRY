@@ -32,7 +32,7 @@
                         <td>{{ s.mStock_product }}</td>
                         <td>{{ s.mStock_qty }} {{ m.mProduct_qtyunit }}</td>
                         <td>
-                            <button class="btn btn-success btn-block">
+                            <button class="btn btn-success btn-block" onclick="if (!confirm('Are you sure?')) { return false }">
                                 <strong>Delete</strong>
                             </button>
                         </td>

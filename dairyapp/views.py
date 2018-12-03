@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .forms import mPurchaseForm,mStockForm
-from .models import mPurchase,mProduct,mStock
+from .forms import mPurchaseForm,mStockForm,mProductSellForm
+from .models import mPurchase,mProduct,mStock, mProductSell
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.views.generic import DetailView
@@ -86,8 +86,33 @@ def mStockDetailView(request,id):
 
 def sellMilkProducts(request):
     title='Sell Milk Products'
+    sales=mProductSell.objects.all().order_by('-mProductSell_date')
+    if request.method=='POST':
+        form=mProductSellForm(request.POST)
+        if form.is_valid():
+            m=form.save(commit=False)
+            ## gives object bound to form
+            ## commit = False means it gives object that has not been saved in db yet
+            milk_product = form.cleaned_data.get('milk_product')
+            m.mProductSell_date=timezone.now()
+            p=get_object_or_404(mProduct,mProduct_name=milk_product)
+            qty=form.cleaned_data.get('mProductSell_qty')
+            rate=form.cleaned_data.get('mProductSell_rate')
+            m.mProductSell_amount=qty*rate
+            p.mProduct_qty=p.mProduct_qty-qty  ##update stock
+            m.mProductSell_qtyunit=p.mProduct_qtyunit
+            p.save()
+            m.save()
+
+            return redirect('/sellmilkproducts')
+
+    else:
+        form=mProductSellForm()
+
     context={
-        'title':title
+        'title':title,
+        'form':form,
+        'sales':sales,
     }
     return render(request,'dairyapp/sell-milk-products.html',context)
 

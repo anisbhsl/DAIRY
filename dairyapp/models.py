@@ -91,15 +91,18 @@ class mStock(models.Model):
 ## milk product sell
 class mProductSell(models.Model):
     mProductSell_id = models.AutoField(primary_key=True)
-    buyer = models.OneToOneField(Customer, on_delete=models.CASCADE)
-    milk_product = models.OneToOneField(mProduct, on_delete=models.CASCADE)
+
+    buyer_name=models.CharField(max_length=50,default='TBD')
+    milk_product = models.ForeignKey(mProduct, on_delete=models.CASCADE)
     ## automatically set the field to now when the object is created
     mProductSell_date=models.DateTimeField(default=timezone.now)
     mProductSell_qty=models.FloatField()
+    mProductSell_qtyunit=models.CharField(max_length=10,default='TBD')
     mProductSell_rate=models.FloatField()
+    mProductSell_amount=models.FloatField(default=0)
 
     def __str__(self):
-        return self.buyer
+        return self.buyer_name
 
 
 ## feeder purchase

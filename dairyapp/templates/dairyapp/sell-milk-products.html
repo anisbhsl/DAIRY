@@ -1,5 +1,7 @@
 {% extends 'dairyapp/base.html' %}
 {% load static %}
+{% load dateconvert_tags %}
+{% load widget_tweaks %}
 
 {% block extra-css %}
 
@@ -8,53 +10,68 @@
 
 {% block main-content %}
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-4 col-lg-offset-1">
             <h2><strong>Sell Products सामन बिक्री</strong></h2>
-            <form class="form-horizontal">
 
-                 <div class="form-group">
-                            <label class="control-label col-sm-2"><strong>Buyer Name:</strong></label>
-                            <div class="col-sm-10">
-                                    <input type="text" class="form-control"  placeholder="Enter Buyer Name">
-                            </div>
+            <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+
+                {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field }}
+                {% endfor %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+
+                    <div class="form-group">
+
+                        {{ field.label_tag }}
+                        {% if form.is_bound %}
+                            {% if field.errors %}
+
+                                {% render_field field class="form-control is-invalid"%}
+
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback">
+                                         {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            {% else %}
+                                   {% render_field field class="form-control is-valid" %}
+                            {% endif %}
+
+                        {% else %}
+                               {% render_field field class="form-control" %}
+                        {% endif %}
+
+                    {% if field.help_text %}
+
+                        <small class="form-text text-primary">{{ field.help_text }}</small>
+                    {% endif %}
+
+                    </div>
+                {% endfor %}
+
+
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                         <button type="submit" class="btn btn-primary btn-block"><strong>Submit</strong></button>
+                    </div>
                  </div>
 
-                 <div class="form-group">
-                        <label class="control-label col-sm-2"><strong>Product</strong></label>
-                        <div class="col-sm-10">
-                                    <select name="milk-products">
-                                        <option value="milk cow open">Milk Cow Open</option>
-                                        <option value="milk cow packet">Milk Cow Packet</option>
-                                        <option value="milk buffalo open">Milk Buffalo Open</option>
-                                        <option value="milk buffalo packet">Milk Buffalo Packet</option>
-                                        <option value="cow ghee">Cow Ghee</option>
-                                        <option value="buffalo ghee">Buffalo Ghee</option>
-                                        <option value="panir">Panir</option>
-                                        <option value="ice cream">Ice Cream</option>
-                                    </select>
-                            </div>
-                 </div>
 
-                 <div class="form-group">
-                            <label class="control-label col-sm-2"><strong>Quantity</strong></label>
-                            <div class="col-sm-4">
-                                    <input type="number" class="form-control"  placeholder="Add Quantity">
-                            </div>
-                 </div>
-                 <div class="form-group">
-                            <label class="control-label col-sm-2"><strong>Rate</strong></label>
-                            <div class="col-sm-4">
-                                    <input type="number" class="form-control"  placeholder="Add Quantity">
-                            </div>
-                 </div>
-                 <br>
-                 <br>
-                 <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-primary btn-block"><strong>Sell Product</strong></button>
-                            </div>
-                 </div>
-            </form>
         </div>
         <div class="col-lg-7">
             <h2><strong>Showing 10 Latest Sales</strong></h2>
@@ -67,17 +84,25 @@
                         <th>Quanity</th>
                         <th> Rate</th>
                         <th>Total Amount(NRs)</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody class="active">
+                    {% for sale in sales %}
                       <tr>
-                        <td>{{ bs_date }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{% bsconverter sale.mProductSell_date %}</td>
+                        <td>{{ sale.buyer_name }}</td>
+                        <td>{{ sale.milk_product }}</td>
+                        <td>{{ sale.mProductSell_qty }} {{ sale.mProductSell_qtyunit }}</td>
+                        <td>{{ sale.mProductSell_rate }}</td>
+                        <td>{{ sale.mProductSell_amount }}</td>
+                          <td>
+                              <button class="btn btn-success btn-block" onclick="if (!confirm('Are you sure?')) { return false }">
+                                <strong>Delete</strong>
+                            </button>
+                          </td>
                       </tr>
+                    {% endfor %}
 
                     </tbody>
                 </table>
