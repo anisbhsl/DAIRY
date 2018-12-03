@@ -40,6 +40,11 @@ def milkPurchase(request):
 
     return render(request,'dairyapp/milk-purchase.html',context)
 
+## Delete Purchase Information
+def milkPurchaseDelete(request,id):
+    mPurchase.objects.get(mPurchase_id=id).delete()
+    return redirect('/milkpurchase')
+
 
 ### stock add
 def addMilkProducts(request):
@@ -84,6 +89,24 @@ def mStockDetailView(request,id):
 
     return render(request,'dairyapp/stock-details.html',context)
 
+## Delete stock logs
+def mStockRecordDelete(request,id,mid):
+    mStock.objects.get(mStock_id=id).delete()
+    # m = get_object_or_404(mProduct, mProduct_id=mid)
+    # stock = mStock.objects.filter(mStock_id=id)
+    # m.mProduct_qty=m.mProduct_qty-stock.mStock_qty
+    # m.save()
+
+    # context = {
+    #     'm': m,
+    #     'stock': stock,
+    # }
+    # if not stock:
+    return redirect('/addmilkproducts')
+
+    #return render(request, 'dairyapp/stock-details.html', context)
+
+
 def sellMilkProducts(request):
     title='Sell Milk Products'
     sales=mProductSell.objects.all().order_by('-mProductSell_date')
@@ -116,4 +139,12 @@ def sellMilkProducts(request):
     }
     return render(request,'dairyapp/sell-milk-products.html',context)
 
+
+## Delete sales record of a product
+def mProductSellDelete(request,id):
+
+    mProductSell.objects.get(mProductSell_id=id).delete()
+    ##Deletes the sales instance from database
+
+    return redirect('/sellmilkproducts')
 

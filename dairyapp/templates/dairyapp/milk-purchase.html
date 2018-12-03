@@ -122,8 +122,11 @@
                             <td>{{purchase.mPurchase_qty}}</td>
                             <td>{{purchase.mPurchase_rate}}</td>
                             <td>{{ purchase.mPurchase_total }}</td>
-                            <td><button class="btn btn-success" onclick="if (!confirm('Do you want to confirm?')) { return false }">
-                                <i class="fa fa-times"></i></button></td>
+                            <td onclick="if (!confirm('Do you want to confirm?')) { return false }">
+                                <a class="btn btn-success" href="{% url 'dairyapp:delete-purchase' id=purchase.mPurchase_id %}">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </td>
                         </tr>
 
                     {% endfor %}

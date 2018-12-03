@@ -96,10 +96,10 @@
                         <td>{{ sale.mProductSell_qty }} {{ sale.mProductSell_qtyunit }}</td>
                         <td>{{ sale.mProductSell_rate }}</td>
                         <td>{{ sale.mProductSell_amount }}</td>
-                          <td>
-                              <button class="btn btn-success btn-block" onclick="if (!confirm('Are you sure?')) { return false }">
+                          <td onclick="if (!confirm('Do you want to confirm?')) { return false }">
+                              <a href="{% url 'dairyapp:delete-sales' id=sale.mProductSell_id %}" class="btn btn-primary">
                                 <strong>Delete</strong>
-                            </button>
+                            </a>
                           </td>
                       </tr>
                     {% endfor %}
