@@ -3,7 +3,7 @@ from .forms import mPurchaseForm,mStockForm,mProductSellForm
 from .models import mPurchase,mProduct,mStock, mProductSell
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from django.views.generic import DetailView
+from django.contrib import messages
 
 
 def index(request):
@@ -122,12 +122,18 @@ def sellMilkProducts(request):
             qty=form.cleaned_data.get('mProductSell_qty')
             rate=form.cleaned_data.get('mProductSell_rate')
             m.mProductSell_amount=qty*rate
-            p.mProduct_qty=p.mProduct_qty-qty  ##update stock
-            m.mProductSell_qtyunit=p.mProduct_qtyunit
-            p.save()
-            m.save()
 
-            return redirect('/sellmilkproducts')
+            ## update only if stock is available
+            if (p.mProduct_qty>=qty):
+                p.mProduct_qty=p.mProduct_qty-qty  ##update stock
+                m.mProductSell_qtyunit=p.mProduct_qtyunit
+                p.save()
+                m.save()
+                messages.info(request, 'Product Successfully sold')
+                return redirect('/sellmilkproducts')
+            else:
+                messages.warning(request,'Product Quantity not available in stock')
+
 
     else:
         form=mProductSellForm()

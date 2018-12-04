@@ -10,6 +10,7 @@
 
 {% block main-content %}
     <div class="row">
+
         <div class="col-lg-4 col-lg-offset-1">
             <h2><strong>Sell Products सामन बिक्री</strong></h2>
 
@@ -70,6 +71,17 @@
                          <button type="submit" class="btn btn-primary btn-block"><strong>Submit</strong></button>
                     </div>
                  </div>
+
+                {% if messages %}
+                  <ul class="messages">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                         <a class="close" href="#" data-dismiss="alert">×</a>
+                        <li class="text-danger">{{ message }}</li>
+                        </div>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
 
 
         </div>
