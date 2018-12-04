@@ -25,16 +25,32 @@ class mPurchaseForm(forms.ModelForm):
     mPurchase_qty=forms.FloatField(
         label='Qty',
         help_text="The quantity must be in numeric format",
+
     )
 
     mPurchase_rate=forms.FloatField(
         label='Rate/Ltr',
         help_text="The rate should be in numeric format",
+
     )
 
     class Meta:
         model=mPurchase
         fields=('seller','mPurchase_product','mPurchase_qty','mPurchase_rate',)
+
+    ## Negative Value Validations
+    def clean(self):
+        super(mPurchaseForm,self).clean()
+        mPurchase_qty = self.cleaned_data.get('mPurchase_qty')
+        mPurchase_rate=self.cleaned_data.get('mPurchase_rate')
+
+        if(mPurchase_qty<0):
+            self._errors['mPurchase_qty']=self.error_class(["Negative value not allowed"])
+
+        if(mPurchase_rate<0):
+            self._errors['mPurchase_rate'] = self.error_class(["Negative value not allowed"])
+
+        return self.cleaned_data
 
 
 class mStockForm(forms.ModelForm):
@@ -52,11 +68,22 @@ class mStockForm(forms.ModelForm):
     mStock_qty = forms.FloatField(
         label='Quantity',
         help_text='Enter stock quantity',
+
     )
 
     class Meta:
         model=mStock
         fields=('mStock_product','mStock_qty',)
+
+    def clean(self):
+        super(mStockForm, self).clean()
+        mStock_qty = self.cleaned_data.get('mStock_qty')
+
+        ## Negative Value Validations
+        if (mStock_qty < 0):
+            self._errors['mStock_qty'] = self.error_class(["Negative value not allowed"])
+
+        return self.cleaned_data
 
 class mProductSellForm(forms.ModelForm):
     """
@@ -79,14 +106,30 @@ class mProductSellForm(forms.ModelForm):
     mProductSell_qty = forms.FloatField(
         label='Quantity',
         help_text='Enter product quantity',
+
     )
 
     mProductSell_rate=forms.FloatField(
         label='Rate',
         help_text='Enter product rate',
+
     )
 
     class Meta:
         model=mProductSell
         fields=('buyer_name','milk_product','mProductSell_qty', 'mProductSell_rate',)
 
+
+    def clean(self):
+        super(mProductSellForm, self).clean()
+        mProductSell_qty = self.cleaned_data.get('mProductSell_qty')
+        mProductSell_rate = self.cleaned_data.get('mProductSell_rate')
+
+        ## Negative Value Validations
+        if (mProductSell_qty < 0):
+            self._errors['mProductSell_qty'] = self.error_class(["Negative value not allowed"])
+
+        if (mProductSell_rate < 0):
+            self._errors['mProductSell_rate'] = self.error_class(["Negative value not allowed"])
+
+        return self.cleaned_data

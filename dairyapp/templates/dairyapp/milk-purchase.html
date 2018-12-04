@@ -55,7 +55,7 @@
                                 {% render_field field class="form-control is-invalid"%}
 
                                 {% for error in field.errors %}
-                                    <div class="invalid-feedback">
+                                    <div class="invalid-feedback text-danger">
                                          {{ error }}
                                     </div>
                                 {% endfor %}
@@ -79,7 +79,7 @@
 
 
                 <div class="form-group">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12" onclick="if (!confirm('Are you sure?')) { return false }">
                          <button type="submit" class="btn btn-primary btn-block" >
                              <strong>Add to Purchase</strong>
                          </button>
