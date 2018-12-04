@@ -21,7 +21,7 @@
                         <th>Date</th>
                         <th>Product</th>
                         <th>Quantity Added</th>
-                        <th>Actions</th>
+
 
                       </tr>
                     </thead>
@@ -31,11 +31,7 @@
                         <td>{% bsconverter s.mStock_date %} </td>
                         <td>{{ s.mStock_product }}</td>
                         <td>{{ s.mStock_qty }} {{ m.mProduct_qtyunit }}</td>
-                        <td onclick="if (!confirm('Are you sure?')) { return false }">
-                            <a href="{% url 'dairyapp:delete-stock-records' id=s.mStock_id mid=m.mProduct_id %}" class="btn btn-success btn-block" >
-                                <strong>Delete</strong>
-                            </a>
-                        </td>
+
 
                       </tr>
                     {% endfor %}

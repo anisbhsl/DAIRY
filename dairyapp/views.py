@@ -89,20 +89,20 @@ def mStockDetailView(request,id):
 
     return render(request,'dairyapp/stock-details.html',context)
 
-## Delete stock logs
-def mStockRecordDelete(request,id,mid):
-    mStock.objects.get(mStock_id=id).delete()
-    # m = get_object_or_404(mProduct, mProduct_id=mid)
-    # stock = mStock.objects.filter(mStock_id=id)
-    # m.mProduct_qty=m.mProduct_qty-stock.mStock_qty
-    # m.save()
-
-    # context = {
-    #     'm': m,
-    #     'stock': stock,
-    # }
-    # if not stock:
-    return redirect('/addmilkproducts')
+# ## Delete stock logs
+# def mStockRecordDelete(request,id):
+#     mStock.objects.get(mStock_id=id).delete()
+#     # m = get_object_or_404(mProduct, mProduct_id=mid)
+#     # stock = mStock.objects.filter(mStock_id=id)
+#     # m.mProduct_qty=m.mProduct_qty-stock.mStock_qty
+#     # m.save()
+#
+#     # context = {
+#     #     'm': m,
+#     #     'stock': stock,
+#     # }
+#     # if not stock:
+#     return redirect('/addmilkproducts')
 
     #return render(request, 'dairyapp/stock-details.html', context)
 
@@ -143,7 +143,11 @@ def sellMilkProducts(request):
 ## Delete sales record of a product
 def mProductSellDelete(request,id):
 
-    mProductSell.objects.get(mProductSell_id=id).delete()
+    sale=mProductSell.objects.get(mProductSell_id=id)
+    p = get_object_or_404(mProduct, mProduct_name=sale.milk_product)
+    p.mProduct_qty=p.mProduct_qty+sale.mProductSell_qty
+    p.save()  ##Update product stock while deleting sale record
+    sale.delete()
     ##Deletes the sales instance from database
 
     return redirect('/sellmilkproducts')

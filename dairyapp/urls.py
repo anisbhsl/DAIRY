@@ -11,7 +11,7 @@ urlpatterns=[
     path('sellmilkproducts/',views.sellMilkProducts,name='sell-milk-products'),
     path('sellmilkproducts/<id>/delete',views.mProductSellDelete,name='delete-sales'),
     path('stockrecords/<id>',views.mStockDetailView,name='stock-detail'),
-    path('stockrecords/<id><mid>/delete',views.mStockRecordDelete,name='delete-stock-records'),
+    #path('stockrecords/<id>/delete',views.mStockRecordDelete,name='delete-stock-records'),
 
 
 ]
