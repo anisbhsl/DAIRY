@@ -1,0 +1,72 @@
+{% extends 'dairyapp/base.html' %}
+{% load static %}
+
+{% block extra-css %}
+
+{% endblock %}
+
+{% block main-content %}
+<div class="row">
+    <div class="col-lg-10 col-lg-offset-1">
+           <h3><strong>REPORT</strong></h3>
+          <ul class="nav nav-tabs bg-info text-primary">
+            <li class="active"><a data-toggle="pill" href="#home">Home</a></li>
+            <li><a data-toggle="pill" href="#menu1">Purchase Report</a></li>
+            <li><a data-toggle="pill" href="#menu2">Stock Report</a></li>
+            <li><a data-toggle="pill" href="#menu3">Sales Report</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+
+              <h3><strong>HOME</strong></h3>
+                <h4><strong>Instructions</strong></h4>
+                <!--LIST
+
+                  <div class="list-group">
+                    <a href="#" class="list-group-item success">
+                      <h4 class="list-group-item-heading">
+                          <strong>1. Click on the sections above.<strong>
+                      </h4>
+
+                    </a>
+                    <a href="#" class="list-group-item active">
+                      <h4 class="list-group-item-heading">
+                          <strong>2. Choose start and end date from calendar.</strong>
+                      </h4>
+
+                    </a>
+                    <a href="#" class="list-group-item info">
+                      <h4 class="list-group-item-heading">
+                          <strong>3. Click on view the report.</strong>
+                      </h4>
+                    </a>
+              </div>
+            -->
+
+
+
+            </div>
+            <div id="menu1" class="tab-pane fade">
+              <h3>Purchase Report</h3>
+              <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+            <div id="menu2" class="tab-pane fade">
+              <h3>Stock Report</h3>
+              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+            </div>
+            <div id="menu3" class="tab-pane fade">
+              <h3>Sales Report</h3>
+              <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+            </div>
+          </div>
+    </div>
+</div>
+
+
+</div>
+
+{% endblock main-content %}
+
+{% block extra-js %}
+{% endblock %}
