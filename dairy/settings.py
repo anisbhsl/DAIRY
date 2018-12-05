@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dairyapp.apps.DairyappConfig',
-    'reportapp.apps.ReportappConfig',
     'widget_tweaks',
 
 ]
