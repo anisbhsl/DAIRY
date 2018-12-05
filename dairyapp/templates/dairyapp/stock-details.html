@@ -5,7 +5,14 @@
 <!-- This HTML section shows logs of stock records -->
 
 {% block extra-css %}
-
+<style>
+    .myclass{
+        font-size:large;
+    }
+    .myclass:hover{
+        font-weight: bolder;
+    }
+</style>
 
 {% endblock %}
 
@@ -25,9 +32,9 @@
 
                       </tr>
                     </thead>
-                    <tbody class="active">
+                    <tbody class="active bg-success">
                     {% for s in stock %}
-                      <tr>
+                      <tr class="myclass">
                         <td>{% bsconverter s.mStock_date %} </td>
                         <td>{{ s.mStock_product }}</td>
                         <td>{{ s.mStock_qty }} {{ m.mProduct_qtyunit }}</td>
@@ -38,6 +45,47 @@
 
                     </tbody>
             </table>
+
+            <!--pagination starts here -->
+            {% if stock.has_other_pages %}
+                <ul class="pagination">
+                    {% if stock.has_previous %}
+                        <li>
+                            <a href="?page={{ stock.previous_page_number }}">&laquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <span>&laquo;</span>
+                        </li>
+                    {% endif %}
+                    {% for i in stock.paginator.page_range %}
+                        {% if sales.number == i %}
+                            <li class="active">
+                                <span>{{ i }}
+                                <span class="sr-only">(current)</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="?page={{ i }}">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if stock.has_next %}
+                        <li>
+                            <a href="?page={{ stock.next_page_number }}">&raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <span>&raquo;</span>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            {% endif %}
+            <!--pagination ends here -->
+
         </div>
         <div class="col-lg-7">
             <!-- This section shows production vs time analytics graph -->

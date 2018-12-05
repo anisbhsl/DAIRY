@@ -65,7 +65,7 @@
             <!-- sidebar menu start-->
             <ul class="sidebar-menu">
               <li class="active">
-                    <a class="" href="{% url 'dairyapp:index' %}">
+                    <a class="" href="{% url 'dairyapp:report' %}">
                           <i class="fa fa-home"></i>
                           <span>Dashboard गृह पृष्‍ठ </span>
                       </a>
@@ -98,10 +98,16 @@
                       <span>Sell बिक्री</span>
                   </a>
               </li>
+              <li class="active">
+                <a class="" href="{% url 'dairyapp:operation-cost' %}">
+                      <i class="fa fa-dollar"></i>
+                      <span>Operation Cost</span>
+                  </a>
+              </li>
 
               </li>
               <li class="active">
-                <a class="" href="#">
+                <a class="" href="{% url 'dairyapp:report' %}">
                       <i class="fa fa-bar-chart-o"></i>
                       <span>Report विवरण</span>
                   </a>
@@ -109,42 +115,6 @@
 
 
 
-              <li class="active" style="pointer-events: none;">
-                  <div class="info-box blue-bg">
-                      <a class="" href="#">
-                          <span>FEEDER दाना</span>
-                      </a>
-                  </div>
-              </li>
-
-              <li class="active">
-                <a class="" href="#">
-                      <i class="fa-signal"></i>
-                      <span>Purchase दाना खरिद</span>
-                  </a>
-              </li>
-              <li class="active">
-                <a class="" href="#">
-                      <i class="fa-dropbox"></i>
-                      <span>Stock दाना स्टक</span>
-                </a>
-              </li>
-
-              <li class="active">
-                <a class="" href="#">
-                      <i class="fa fa-money"></i>
-                      <span>Sell दाना बिक्री</span>
-                  </a>
-              </li>
-
-              </li>
-
-              <li class="active">
-                <a class="" href="#">
-                      <i class="fa fa-bar-chart-o"></i>
-                      <span>Report विवरण</span>
-                  </a>
-              </li>
 
 
 

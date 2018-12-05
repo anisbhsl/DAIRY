@@ -67,7 +67,7 @@ class mPurchase(models.Model):
     mPurchase_id=models.AutoField(primary_key=True)
     seller=models.CharField(max_length=50)
     mPurchase_date=models.DateTimeField(default=timezone.now)
-    mPurchase_product=models.CharField(max_length=10,choices=MILK_CHOICES)
+    mPurchase_product=models.CharField(max_length=15,choices=MILK_CHOICES)
     mPurchase_qty=models.FloatField()
     mPurchase_rate=models.FloatField()
     mPurchase_total=models.FloatField(default=0)
@@ -105,12 +105,13 @@ class mProductSell(models.Model):
         return self.buyer_name
 
 
-## feeder purchase
-## class feederPurchase(models.Model):
-    ##
+class operationCost(models.Model):
+    operationCost_id=models.AutoField(primary_key=True)
+    particular=models.CharField(max_length=80)
+    date=models.DateTimeField(default=timezone.now)
+    qty=models.FloatField()
+    rate=models.FloatField()
+    amount=models.FloatField()
 
-
-
-## feeder product sell
-### class feederSell(models.Model):
-    ###
+    def __str__(self):
+        return self.particular

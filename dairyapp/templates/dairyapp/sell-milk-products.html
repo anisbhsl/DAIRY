@@ -4,7 +4,14 @@
 {% load widget_tweaks %}
 
 {% block extra-css %}
-
+<style>
+    .myclass{
+        font-size:large;
+    }
+    .myclass:hover{
+        font-weight:bold;
+    }
+</style>
 
 {% endblock %}
 
@@ -87,9 +94,11 @@
         </div>
         <div class="col-lg-7">
             <h2><strong>Showing 10 Latest Sales</strong></h2>
-            <table class="table table-striped table-hover">
+
+
+            <table class="table table-striped table-hover table-responsive">
                     <thead>
-                      <tr class="info">
+                      <tr class="bg-success">
                         <th>Date</th>
                         <th>Buyer Name</th>
                         <th>Product</th>
@@ -100,24 +109,65 @@
                       </tr>
                     </thead>
                     <tbody class="active">
-                    {% for sale in sales %}
-                      <tr>
-                        <td>{% bsconverter sale.mProductSell_date %}</td>
-                        <td>{{ sale.buyer_name }}</td>
-                        <td>{{ sale.milk_product }}</td>
-                        <td>{{ sale.mProductSell_qty }} {{ sale.mProductSell_qtyunit }}</td>
-                        <td>{{ sale.mProductSell_rate }}</td>
-                        <td>{{ sale.mProductSell_amount }}</td>
-                          <td onclick="if (!confirm('Do you want to confirm?')) { return false }">
-                              <a href="{% url 'dairyapp:delete-sales' id=sale.mProductSell_id %}" class="btn btn-primary">
-                                <strong>Delete</strong>
-                            </a>
-                          </td>
-                      </tr>
-                    {% endfor %}
+                        {% for sale in sales %}
+                          <tr class="myclass">
+                            <td>{% bsconverter sale.mProductSell_date %}</td>
+                            <td>{{ sale.buyer_name }}</td>
+                            <td>{{ sale.milk_product }}</td>
+                            <td>{{ sale.mProductSell_qty }} {{ sale.mProductSell_qtyunit }}</td>
+                            <td>{{ sale.mProductSell_rate }}</td>
+                            <td>{{ sale.mProductSell_amount }}</td>
+                              <td onclick="if (!confirm('Do you want to confirm?')) { return false }">
+                                  <a href="{% url 'dairyapp:delete-sales' id=sale.mProductSell_id %}" class="btn btn-primary">
+                                    <strong>Delete</strong>
+                                </a>
+                              </td>
+                          </tr>
+                        {% endfor %}
 
                     </tbody>
-                </table>
+            </table>
+
+
+            {% if sales.has_other_pages %}
+                <ul class="pagination">
+                    {% if sales.has_previous %}
+                        <li>
+                            <a href="?page={{ sales.previous_page_number }}">&laquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <span>&laquo;</span>
+                        </li>
+                    {% endif %}
+                    {% for i in sales.paginator.page_range %}
+                        {% if sales.number == i %}
+                            <li class="active">
+                                <span>{{ i }}
+                                <span class="sr-only">(current)</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="?page={{ i }}">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if sales.has_next %}
+                        <li>
+                            <a href="?page={{ sales.next_page_number }}">&raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <span>&raquo;</span>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            {% endif %}
+
+
         </div>
     </div>
 

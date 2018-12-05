@@ -1,5 +1,5 @@
 from django import forms
-from .models import mProduct,mPurchase, mStock, mProductSell
+from .models import mProduct,mPurchase, mStock, mProductSell, operationCost
 from dairyapp.choices import MILK_CHOICES
 
 class mPurchaseForm(forms.ModelForm):
@@ -131,5 +131,42 @@ class mProductSellForm(forms.ModelForm):
 
         if (mProductSell_rate < 0):
             self._errors['mProductSell_rate'] = self.error_class(["Negative value not allowed"])
+
+        return self.cleaned_data
+
+class operationCostForm(forms.ModelForm):
+    """
+        This form is for operational costs!
+    """
+
+    particular=forms.CharField(
+        label='Particular',
+
+    )
+
+    qty=forms.FloatField(
+        label='Quantity',
+        help_text='Enter Quantity',
+    )
+
+    rate=forms.FloatField(
+        label='Rate',
+        help_text='Enter Rate',
+    )
+
+    class Meta:
+        model=operationCost
+        fields=('particular','qty','rate')
+
+    def clean(self):
+        super(operationCostForm,self).clean()
+        qty = self.cleaned_data.get('qty')
+        rate=self.cleaned_data.get('rate')
+
+        if(qty<0):
+            self._errors['qty']=self.error_class(["Negative value not allowed"])
+
+        if(rate<0):
+            self._errors['rate'] = self.error_class(["Negative value not allowed"])
 
         return self.cleaned_data

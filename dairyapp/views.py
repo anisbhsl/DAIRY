@@ -1,9 +1,10 @@
-from django.shortcuts import render
-from .forms import mPurchaseForm,mStockForm,mProductSellForm
+from .forms import mPurchaseForm,mStockForm,mProductSellForm, operationCostForm
 from .models import mPurchase,mProduct,mStock, mProductSell
+from .models import operationCost as operationCostModel
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 
 def index(request):
@@ -15,7 +16,7 @@ def index(request):
 
 def milkPurchase(request):
     title='Buy Milk'
-    milk = mPurchase.objects.all().order_by('-mPurchase_date')
+    milk_list = mPurchase.objects.all().order_by('-mPurchase_date')
 
     if request.method=='POST':
         form=mPurchaseForm(request.POST)
@@ -30,6 +31,17 @@ def milkPurchase(request):
 
     else:
         form=mPurchaseForm()
+
+    ## Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(milk_list, 10)
+
+    try:
+        milk = paginator.page(page)
+    except PageNotAnInteger:
+        milk = paginator.page(1)
+    except EmptyPage:
+        milk = paginator.page(paginator.num_pages)
 
     context = {
         'title': title,
@@ -81,7 +93,18 @@ def addMilkProducts(request):
 def mStockDetailView(request,id):
     model=mStock
     m=get_object_or_404(mProduct,mProduct_id=id)
-    stock=mStock.objects.filter(mStock_product=m.mProduct_id).order_by('-mStock_date')
+    stock_list=mStock.objects.filter(mStock_product=m.mProduct_id).order_by('-mStock_date')
+    ## Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(stock_list, 10)
+
+    try:
+        stock = paginator.page(page)
+    except PageNotAnInteger:
+        stock = paginator.page(1)
+    except EmptyPage:
+        stock = paginator.page(paginator.num_pages)
+
     context={
         'm':m,
         'stock':stock,
@@ -109,7 +132,7 @@ def mStockDetailView(request,id):
 
 def sellMilkProducts(request):
     title='Sell Milk Products'
-    sales=mProductSell.objects.all().order_by('-mProductSell_date')
+    sales_list=mProductSell.objects.all().order_by('-mProductSell_date')
     if request.method=='POST':
         form=mProductSellForm(request.POST)
         if form.is_valid():
@@ -138,6 +161,17 @@ def sellMilkProducts(request):
     else:
         form=mProductSellForm()
 
+    ## Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(sales_list, 10)
+
+    try:
+        sales = paginator.page(page)
+    except PageNotAnInteger:
+        sales = paginator.page(1)
+    except EmptyPage:
+        sales = paginator.page(paginator.num_pages)
+
     context={
         'title':title,
         'form':form,
@@ -158,3 +192,57 @@ def mProductSellDelete(request,id):
 
     return redirect('/sellmilkproducts')
 
+
+def operationCost(request):
+    title='Operation Cost'
+    operations_list=operationCostModel.objects.all().order_by('-date')
+
+    if request.method=='POST':
+        form=operationCostForm(request.POST)
+        if form.is_valid():
+            m=form.save(commit=False)
+            ## gives object bound to form
+            ## commit = False means it gives object that has not been saved in db yet
+            m.date=timezone.now()
+            qty=form.cleaned_data.get('qty')
+            rate=form.cleaned_data.get('rate')
+            m.amount=qty*rate
+            m.save()
+            return redirect('/operationcost')
+
+    else:
+        form=operationCostForm()
+
+    ## Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(operations_list, 10)
+
+    try:
+        operations = paginator.page(page)
+    except PageNotAnInteger:
+        operations = paginator.page(1)
+    except EmptyPage:
+        operations = paginator.page(paginator.num_pages)
+
+    context={
+        'title':title,
+        'form': form,
+        'operations':operations,
+
+
+    }
+    return render(request,'dairyapp/operationcost.html',context)
+
+## Delete Operation Cost Records
+def deleteOperationCost(request,id):
+    operationCost.objects.get(operationCost_id=id).delete()
+    return redirect('/operationcost')
+
+## Report Page
+
+def report(request):
+    title='REPORT'
+    context={
+        'title':title
+    }
+    return render(request,'dairyapp/report.html',context)
