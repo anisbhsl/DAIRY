@@ -22,12 +22,13 @@
     <link href="{%  static 'css/style-responsive.css' %}" rel="stylesheet" />
     <link href="{% static 'css/xcharts.min.css' %}" rel=" stylesheet">
     <link href="{%  static 'css/jquery-ui-1.10.4.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/nepali.datepicker.v2.2.min.css' %}" />
 
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/jquery-ui-1.10.4.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery-ui-1.9.2.custom.min.js' %}"></script>
-
+    <script type="text/javascript" src="{% static 'js/nepali.datepicker.v2.2.min.js' %}"></script>
     {% block extra-css %}
 
 
@@ -65,7 +66,7 @@
             <!-- sidebar menu start-->
             <ul class="sidebar-menu">
               <li class="active">
-                    <a class="" href="{% url 'dairyapp:report' %}">
+                    <a class="" href="{% url 'dairyapp:test' %}">
                           <i class="fa fa-home"></i>
                           <span>Dashboard गृह पृष्‍ठ </span>
                       </a>

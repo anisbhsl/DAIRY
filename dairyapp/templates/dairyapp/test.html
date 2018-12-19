@@ -6,19 +6,15 @@
 {% block extra-css %}
 
     <style>
-    .myclass{
-        font-size:large;
-    }
-    .myclass:hover{
-        font-weight:bold;
-    }
+
+
     </style>
 {% endblock %}
 
 {% block main-content %}
     <div class="row">
         <div class="col-lg-4 col-lg-offset-1">
-            <h2><strong>Operational Costs</strong></h2>
+            <h2><strong>TEST</strong></h2>
 
             <form class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -88,82 +84,9 @@
                     {% endfor %}
                   </ul>
                 {% endif %}
-
-
         </div>
 
-        <div class="col-lg-7">
-            <h2><strong>Showing top 10 Operational Costs</strong></h2>
-            <table class="table table-striped table-hover">
-                    <thead>
-                      <tr class="info">
-                        <th>Date</th>
-                        <th>Particulars</th>
-                        <th>Quanity</th>
-                        <th> Rate</th>
-                        <th>Total Amount(NRs)</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody class="active">
-                    {% for op in operations %}
-                      <tr class="myclass">
-                        <td>{{ op.date |date:"Y-m-d" }}</td>
-                        <td>{{ op.particular }}</td>
-                        <td>{{ op.qty }}</td>
-                        <td>{{ op.rate }}</td>
-                        <td>{{ op.amount }}</td>
-                          <td onclick="if (!confirm('Do you want to confirm?')) { return false }">
-                              <a href="{% url 'dairyapp:delete-operation-cost' id=op.operationCost_id %}" class="btn btn-primary">
-                                <strong>Delete</strong>
-                            </a>
-                          </td>
-                      </tr>
-                    {% endfor %}
 
-                    </tbody>
-            </table>
-
-            {% if operations.has_other_pages %}
-            <ul class="pagination">
-                {% if operations.has_previous %}
-                    <li>
-                        <a href="?page={{ operations.previous_page_number }}">&laquo;</a>
-                    </li>
-                {% else %}
-                    <li class="disabled">
-                        <span>&laquo;</span>
-                    </li>
-                {% endif %}
-                {% for i in operations.paginator.page_range %}
-                    {% if operations.number == i %}
-                        <li class="active">
-                            <span>{{ i }}
-                            <span class="sr-only">(current)</span>
-                            </span>
-                        </li>
-                    {% else %}
-                        <li>
-                            <a href="?page={{ i }}">{{ i }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-
-                {% if operations.has_next %}
-                    <li>
-                        <a href="?page={{ operations.next_page_number }}">&raquo;</a>
-                    </li>
-                {% else %}
-                    <li class="disabled">
-                        <span>&raquo;</span>
-                    </li>
-                {% endif %}
-
-            </ul>
-            {% endif %}
-
-
-        </div>
 
     </div>
 
@@ -172,7 +95,6 @@
 
 {% block extra-js %}
     <script>
-    //script for nepali calendar integration
 
         $('#nepalicalendar').nepaliDatePicker({
             onFocus:false,

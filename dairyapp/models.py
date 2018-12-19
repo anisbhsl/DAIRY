@@ -115,3 +115,12 @@ class operationCost(models.Model):
 
     def __str__(self):
         return self.particular
+
+
+class test(models.Model):
+    test_id=models.AutoField(primary_key=True)
+    name=models.CharField(max_length=50)
+    date=models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.name

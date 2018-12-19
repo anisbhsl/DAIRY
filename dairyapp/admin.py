@@ -5,5 +5,5 @@ from .models import *
 admin.site.register(mProductUnit)
 admin.site.register(mProduct)
 admin.site.register(mPurchase)
-
+admin.site.register(test)
 

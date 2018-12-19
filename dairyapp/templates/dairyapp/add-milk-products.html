@@ -136,6 +136,23 @@
 
     </script>
 
+    <script>
+
+        $('#nepalicalendar').nepaliDatePicker({
+            onFocus:false,
+            ndpTriggerButton: true,
+            ndpTriggerButtonText: 'Date',
+            npdMonth:true,
+            npdYearCount:10,
+            ndpTriggerButtonClass: 'btn btn-primary btn-sm',
+            /*disableBefore:'03/05/2075', //MM/DD/YYYY */
+            disableDaysAfter:'1'
+
+        });
+
+
+    </script>
+
 
 
 {% endblock %}

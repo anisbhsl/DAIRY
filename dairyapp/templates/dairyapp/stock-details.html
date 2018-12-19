@@ -35,7 +35,7 @@
                     <tbody class="active bg-success">
                     {% for s in stock %}
                       <tr class="myclass">
-                        <td>{% bsconverter s.mStock_date %} </td>
+                        <td>{{s.mStock_date | date:"Y-m-d"}} </td>
                         <td>{{ s.mStock_product }}</td>
                         <td>{{ s.mStock_qty }} {{ m.mProduct_qtyunit }}</td>
 

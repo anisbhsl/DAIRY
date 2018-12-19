@@ -116,7 +116,7 @@
                     {% for purchase in milk %}
                         <tr>
                             <!-- template tag to convert AD into BS -->
-                            <td>{% bsconverter purchase.mPurchase_date %}</td>
+                            <td>{{ purchase.mPurchase_date |date:"Y-m-d" }}</td>
 
                             <td>{{purchase.seller  }}</td>
                             <td>{{purchase.mPurchase_product}}</td>
@@ -183,6 +183,21 @@
 {% endblock %}
 
 {% block extra-js %}
+<script>
 
+        $('#nepalicalendar').nepaliDatePicker({
+            onFocus:false,
+            ndpTriggerButton: true,
+            ndpTriggerButtonText: 'Date',
+            npdMonth:true,
+            npdYearCount:10,
+            ndpTriggerButtonClass: 'btn btn-primary btn-sm',
+            /*disableBefore:'03/05/2075', //MM/DD/YYYY */
+            disableDaysAfter:'1'
+
+        });
+
+
+</script>
 
 {% endblock %}

@@ -1,10 +1,11 @@
-from .forms import mPurchaseForm,mStockForm,mProductSellForm, operationCostForm
-from .models import mPurchase,mProduct,mStock, mProductSell
+from .forms import mPurchaseForm,mStockForm,mProductSellForm, operationCostForm,testForm
+from .models import mPurchase,mProduct,mStock, mProductSell,test
 from .models import operationCost as operationCostModel
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib import messages
 from django.core.paginator import Paginator
+from bikram import samwat
 
 
 def index(request):
@@ -24,7 +25,7 @@ def milkPurchase(request):
             m=form.save(commit=False)
             ## gives object bound to form
             ## commit = False means it gives object that has not been saved in db yet
-            m.mPurchase_date=timezone.now()
+            ##m.mPurchase_date=timezone.now()
             m.mPurchase_total=m.mPurchase_qty*m.mPurchase_rate
             m.save()
             return redirect('/milkpurchase')
@@ -70,7 +71,7 @@ def addMilkProducts(request):
             ## gives object bound to form
             ## commit = False means it gives object that has not been saved in db yet
             mProduct_name=form.cleaned_data.get('mStock_product')
-            m.mStock_date=timezone.now()
+            ##m.mStock_date=timezone.now()
             p=get_object_or_404(mProduct,mProduct_name=mProduct_name)
             qty=form.cleaned_data.get('mStock_qty')
             p.mProduct_qty=p.mProduct_qty+qty  ##update stock
@@ -140,7 +141,7 @@ def sellMilkProducts(request):
             ## gives object bound to form
             ## commit = False means it gives object that has not been saved in db yet
             milk_product = form.cleaned_data.get('milk_product')
-            m.mProductSell_date=timezone.now()
+            ##m.mProductSell_date=timezone.now()
             p=get_object_or_404(mProduct,mProduct_name=milk_product)
             qty=form.cleaned_data.get('mProductSell_qty')
             rate=form.cleaned_data.get('mProductSell_rate')
@@ -203,7 +204,7 @@ def operationCost(request):
             m=form.save(commit=False)
             ## gives object bound to form
             ## commit = False means it gives object that has not been saved in db yet
-            m.date=timezone.now()
+            #m.date=timezone.now()
             qty=form.cleaned_data.get('qty')
             rate=form.cleaned_data.get('rate')
             m.amount=qty*rate
@@ -235,7 +236,7 @@ def operationCost(request):
 
 ## Delete Operation Cost Records
 def deleteOperationCost(request,id):
-    operationCost.objects.get(operationCost_id=id).delete()
+    operationCostModel.objects.get(operationCost_id=id).delete()
     return redirect('/operationcost')
 
 ## Report Page
@@ -246,3 +247,27 @@ def report(request):
         'title':title
     }
     return render(request,'dairyapp/report.html',context)
+
+def test(request):
+    title='TEST'
+
+    if request.method=='POST':
+        form=testForm(request.POST)
+        if form.is_valid():
+            m=form.save(commit=False)
+            ## gives object bound to form
+            ## commit = False means it gives object that has not been saved in db yet
+
+            date=form.cleaned_data.get('data')
+
+
+            m.save()
+            return redirect('/test')
+
+    else:
+        form=testForm()
+    context={
+        'title':title,
+        'form':form,
+    }
+    return render(request,'dairyapp/test.html',context)

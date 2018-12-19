@@ -14,6 +14,7 @@ urlpatterns=[
     path('operationcost/',views.operationCost,name='operation-cost'),
     path('operationcost/<id>/delete',views.deleteOperationCost,name='delete-operation-cost'),
     path('report/', views.report, name='report'),
+    path('test/',views.test,name='test'),
     #path('stockrecords/<id>/delete',views.mStockRecordDelete,name='delete-stock-records'),
 
 

@@ -1,6 +1,7 @@
 from django import forms
-from .models import mProduct,mPurchase, mStock, mProductSell, operationCost
+from .models import mProduct,mPurchase, mStock, mProductSell, operationCost,test
 from dairyapp.choices import MILK_CHOICES
+
 
 class mPurchaseForm(forms.ModelForm):
     """
@@ -11,6 +12,10 @@ class mPurchaseForm(forms.ModelForm):
        label='Seller Name',
         max_length=50,
         help_text="Please Enter Seller Name",
+    )
+
+    mPurchase_date=forms.DateTimeField(
+        label='Date',
     )
 
     mPurchase_product=forms.ChoiceField(
@@ -34,9 +39,13 @@ class mPurchaseForm(forms.ModelForm):
 
     )
 
+    def __init__(self, *args, **kwargs):
+        super(mPurchaseForm, self).__init__(*args, **kwargs)
+        self.fields['mPurchase_date'].widget.attrs['id'] = 'nepalicalendar'
+
     class Meta:
         model=mPurchase
-        fields=('seller','mPurchase_product','mPurchase_qty','mPurchase_rate',)
+        fields=('seller','mPurchase_date','mPurchase_product','mPurchase_qty','mPurchase_rate',)
 
     ## Negative Value Validations
     def clean(self):
@@ -65,15 +74,21 @@ class mStockForm(forms.ModelForm):
         required=True,
 
     )
+    mStock_date=forms.DateTimeField(
+        label='Date',
+        required=True,
+    )
     mStock_qty = forms.FloatField(
         label='Quantity',
         help_text='Enter stock quantity',
+        required=True,
 
     )
 
-    class Meta:
-        model=mStock
-        fields=('mStock_product','mStock_qty',)
+    def __init__(self, *args, **kwargs):
+        super(mStockForm, self).__init__(*args, **kwargs)
+        self.fields['mStock_date'].widget.attrs['id'] = 'nepalicalendar'
+
 
     def clean(self):
         super(mStockForm, self).clean()
@@ -85,15 +100,24 @@ class mStockForm(forms.ModelForm):
 
         return self.cleaned_data
 
+    class Meta:
+        model=mStock
+        fields=('mStock_product','mStock_date','mStock_qty',)
+
+
+
+
+
 class mProductSellForm(forms.ModelForm):
     """
         This form is for selling products
     """
 
     buyer_name=forms.CharField(
-       label='Buyer Name',
+        label='Buyer Name',
         max_length=50,
         help_text="Please Enter Buyer Name/Select From Dropdown",
+        required=True,
     )
 
     milk_product=forms.ModelChoiceField(
@@ -103,22 +127,26 @@ class mProductSellForm(forms.ModelForm):
         required=True
     )
 
+    mProductSell_date=forms.DateTimeField(
+        label='Date',
+        required=True,
+    )
+
     mProductSell_qty = forms.FloatField(
         label='Quantity',
         help_text='Enter product quantity',
-
+        required=True,
     )
 
     mProductSell_rate=forms.FloatField(
         label='Rate',
         help_text='Enter product rate',
-
+        required=True,
     )
 
-    class Meta:
-        model=mProductSell
-        fields=('buyer_name','milk_product','mProductSell_qty', 'mProductSell_rate',)
-
+    def __init__(self, *args, **kwargs):
+        super(mProductSellForm, self).__init__(*args, **kwargs)
+        self.fields['mProductSell_date'].widget.attrs['id'] = 'nepalicalendar'
 
     def clean(self):
         super(mProductSellForm, self).clean()
@@ -134,6 +162,13 @@ class mProductSellForm(forms.ModelForm):
 
         return self.cleaned_data
 
+    class Meta:
+        model=mProductSell
+        fields=('buyer_name','milk_product','mProductSell_qty', 'mProductSell_rate',)
+
+
+
+
 class operationCostForm(forms.ModelForm):
     """
         This form is for operational costs!
@@ -141,22 +176,32 @@ class operationCostForm(forms.ModelForm):
 
     particular=forms.CharField(
         label='Particular',
-
+        required=True,
+    )
+    date=forms.CharField(
+        label='Date',
+        required=True,
     )
 
     qty=forms.FloatField(
         label='Quantity',
         help_text='Enter Quantity',
+        required=True,
     )
 
     rate=forms.FloatField(
         label='Rate',
         help_text='Enter Rate',
+        required=True,
     )
 
     class Meta:
         model=operationCost
-        fields=('particular','qty','rate')
+        fields=('particular','date','qty','rate')
+
+    def __init__(self, *args, **kwargs):
+        super(operationCostForm, self).__init__(*args, **kwargs)
+        self.fields['date'].widget.attrs['id'] = 'nepalicalendar'
 
     def clean(self):
         super(operationCostForm,self).clean()
@@ -170,3 +215,29 @@ class operationCostForm(forms.ModelForm):
             self._errors['rate'] = self.error_class(["Negative value not allowed"])
 
         return self.cleaned_data
+
+class testForm(forms.ModelForm):
+    name=forms.CharField(
+        label='name'
+    )
+    date=forms.DateTimeField(
+        label='date'
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(testForm, self).__init__(*args, **kwargs)
+        self.fields['date'].widget.attrs['id'] = 'nepalicalendar'
+
+    ## validate and clean entered date value
+    def clean(self):
+        super(testForm,self).clean()
+        date=self.cleaned_data.get('date')
+
+
+
+    class Meta:
+        model=test
+        fields=('name','date',)
+
+
+
