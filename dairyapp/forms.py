@@ -1,6 +1,7 @@
 from django import forms
 from .models import mProduct,mPurchase, mStock, mProductSell, operationCost,test
 from dairyapp.choices import MILK_CHOICES
+import datetime
 
 
 class mPurchaseForm(forms.ModelForm):
@@ -14,8 +15,9 @@ class mPurchaseForm(forms.ModelForm):
         help_text="Please Enter Seller Name",
     )
 
-    mPurchase_date=forms.DateTimeField(
+    mPurchase_date=forms.DateField(
         label='Date',
+        #input_formats=['%Y-%m-%d'],
     )
 
     mPurchase_product=forms.ChoiceField(
@@ -50,8 +52,15 @@ class mPurchaseForm(forms.ModelForm):
     ## Negative Value Validations
     def clean(self):
         super(mPurchaseForm,self).clean()
+        mPurchase_date = self.cleaned_data.get('mPurchase_date')
         mPurchase_qty = self.cleaned_data.get('mPurchase_qty')
         mPurchase_rate=self.cleaned_data.get('mPurchase_rate')
+
+
+        try:
+            datetime.datetime.strptime(str(mPurchase_date), '%Y-%m-%d')
+        except ValueError:
+            self._errors['mPurchase_date'] = self.error_class(["Date should be in YYYY-mm-dd format"])
 
         if(mPurchase_qty<0):
             self._errors['mPurchase_qty']=self.error_class(["Negative value not allowed"])
@@ -74,7 +83,7 @@ class mStockForm(forms.ModelForm):
         required=True,
 
     )
-    mStock_date=forms.DateTimeField(
+    mStock_date=forms.DateField(
         label='Date',
         required=True,
     )
@@ -92,7 +101,14 @@ class mStockForm(forms.ModelForm):
 
     def clean(self):
         super(mStockForm, self).clean()
+        mStock_date=self.cleaned_data.get('mStock_date')
         mStock_qty = self.cleaned_data.get('mStock_qty')
+
+        try:
+            datetime.datetime.strptime(str(mStock_date), '%Y-%m-%d')
+        except ValueError:
+            self._errors['mStock_date'] = self.error_class(["Date should be in YYYY-mm-dd format"])
+
 
         ## Negative Value Validations
         if (mStock_qty < 0):
@@ -127,7 +143,7 @@ class mProductSellForm(forms.ModelForm):
         required=True
     )
 
-    mProductSell_date=forms.DateTimeField(
+    mProductSell_date=forms.DateField(
         label='Date',
         required=True,
     )
@@ -150,8 +166,15 @@ class mProductSellForm(forms.ModelForm):
 
     def clean(self):
         super(mProductSellForm, self).clean()
+        mProductSell_date=self.cleaned_data.get('mProductSell_date')
         mProductSell_qty = self.cleaned_data.get('mProductSell_qty')
         mProductSell_rate = self.cleaned_data.get('mProductSell_rate')
+
+        try:
+            datetime.datetime.strptime(str(mProductSell_date), '%Y-%m-%d')
+        except ValueError:
+            self._errors['mProductSell_date'] = self.error_class(["Date should be in YYYY-mm-dd format"])
+
 
         ## Negative Value Validations
         if (mProductSell_qty < 0):
@@ -164,9 +187,7 @@ class mProductSellForm(forms.ModelForm):
 
     class Meta:
         model=mProductSell
-        fields=('buyer_name','milk_product','mProductSell_qty', 'mProductSell_rate',)
-
-
+        fields=('buyer_name','milk_product','mProductSell_date','mProductSell_qty', 'mProductSell_rate',)
 
 
 class operationCostForm(forms.ModelForm):
@@ -178,7 +199,7 @@ class operationCostForm(forms.ModelForm):
         label='Particular',
         required=True,
     )
-    date=forms.CharField(
+    date=forms.DateField(
         label='Date',
         required=True,
     )
@@ -205,9 +226,17 @@ class operationCostForm(forms.ModelForm):
 
     def clean(self):
         super(operationCostForm,self).clean()
+        date=self.cleaned_data.get('date')
         qty = self.cleaned_data.get('qty')
         rate=self.cleaned_data.get('rate')
 
+        ##date validation
+        try:
+            datetime.datetime.strptime(str(date), '%Y-%m-%d')
+        except ValueError:
+            self._errors['date'] = self.error_class(["Date should be in YYYY-mm-dd format"])
+
+        ## Negative Value Validation
         if(qty<0):
             self._errors['qty']=self.error_class(["Negative value not allowed"])
 
@@ -215,6 +244,54 @@ class operationCostForm(forms.ModelForm):
             self._errors['rate'] = self.error_class(["Negative value not allowed"])
 
         return self.cleaned_data
+
+##form to select date in report
+
+# def selectdate(model,fields):
+#
+#     class _CustomForm(forms.ModelForm):
+#         class Meta:
+#             model=model
+#             fields=fields
+#
+#     return _CustomForm
+
+class dateForm(forms.Form):
+
+    fromdate=forms.DateField(
+        label='FROM',
+
+    )
+
+    todate=forms.DateField(
+        label='TO',
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(dateForm, self).__init__(*args, **kwargs)
+        self.fields['fromdate'].widget.attrs['id'] = 'nepalicalendar'
+        self.fields['todate'].widget.attrs['id'] = 'nepalicalendar2'
+
+    ## validate and clean entered date value
+    def clean(self):
+        super(dateForm,self).clean()
+        fromdate=self.cleaned_data.get('fromdate')
+        todate=self.cleaned_data.get('todate')
+
+        try:
+            datetime.datetime.strptime(str(fromdate),'%Y-%m-%d')
+        except ValueError:
+            self._errors['fromdate'] = self.error_class(["Date should be in YYYY-mm-dd format"])
+
+        try:
+            datetime.datetime.strptime(str(todate), '%Y-%m-%d')
+        except ValueError:
+            self._errors['todate'] = self.error_class(["Date should be in YYYY-mm-dd format"])
+
+
+    class Meta:
+        fields=('fromdate','todate')
+
 
 class testForm(forms.ModelForm):
     name=forms.CharField(
