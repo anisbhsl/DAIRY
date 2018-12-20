@@ -66,7 +66,7 @@ class mPurchase(models.Model):
 
     mPurchase_id=models.AutoField(primary_key=True)
     seller=models.CharField(max_length=50)
-    mPurchase_date=models.DateTimeField(default=timezone.now)
+    mPurchase_date=models.DateField(blank=True,null=True)
     mPurchase_product=models.CharField(max_length=15,choices=MILK_CHOICES)
     mPurchase_qty=models.FloatField()
     mPurchase_rate=models.FloatField()
@@ -95,7 +95,7 @@ class mProductSell(models.Model):
     buyer_name=models.CharField(max_length=50,default='TBD')
     milk_product = models.ForeignKey(mProduct, on_delete=models.CASCADE)
     ## automatically set the field to now when the object is created
-    mProductSell_date=models.DateTimeField(default=timezone.now)
+    mProductSell_date=models.DateField(blank=True,null=True,default=datetime.date.today)
     mProductSell_qty=models.FloatField()
     mProductSell_qtyunit=models.CharField(max_length=10,default='TBD')
     mProductSell_rate=models.FloatField()
@@ -108,7 +108,7 @@ class mProductSell(models.Model):
 class operationCost(models.Model):
     operationCost_id=models.AutoField(primary_key=True)
     particular=models.CharField(max_length=80)
-    date=models.DateTimeField(default=timezone.now)
+    date=models.DateField(blank=True,null=True,default=datetime.date.today)
     qty=models.FloatField()
     rate=models.FloatField()
     amount=models.FloatField()

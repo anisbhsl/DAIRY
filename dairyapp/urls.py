@@ -14,6 +14,10 @@ urlpatterns=[
     path('operationcost/',views.operationCost,name='operation-cost'),
     path('operationcost/<id>/delete',views.deleteOperationCost,name='delete-operation-cost'),
     path('report/', views.report, name='report'),
+    path('report/purchasereport/',views.purchaseReport,name='purchase-report'),
+    path('report/stockreport/',views.stockReport,name='stock-report'),
+    path('report/salesreport/',views.salesReport,name='sales-report'),
+    path('report/operationcostreport',views.operationCostReport,name='operationcost-report'),
     path('test/',views.test,name='test'),
     #path('stockrecords/<id>/delete',views.mStockRecordDelete,name='delete-stock-records'),
 
