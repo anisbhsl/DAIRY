@@ -1,11 +1,11 @@
-from .forms import mPurchaseForm,mStockForm,mProductSellForm, operationCostForm,testForm
+from .forms import mPurchaseForm,mStockForm,mProductSellForm, operationCostForm,testForm,dateForm
 from .models import mPurchase,mProduct,mStock, mProductSell,test
 from .models import operationCost as operationCostModel
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
 from django.contrib import messages
 from django.core.paginator import Paginator
-from bikram import samwat
+from dateutil import parser
+
 
 
 def index(request):
@@ -78,6 +78,7 @@ def addMilkProducts(request):
 
             p.save()
             m.save()
+            messages.info(request, 'Product Successfully Added to Stock')
 
             return redirect('/addmilkproducts')
 
@@ -209,6 +210,7 @@ def operationCost(request):
             rate=form.cleaned_data.get('rate')
             m.amount=qty*rate
             m.save()
+            messages.info(request, 'Record Successfully Added')
             return redirect('/operationcost')
 
     else:
@@ -247,6 +249,61 @@ def report(request):
         'title':title
     }
     return render(request,'dairyapp/report.html',context)
+
+def purchaseReport(request):
+    title='Purchase Report'
+    milk=mPurchase.objects.all().order_by('-mPurchase_date')[:10]
+
+    if request.method=='POST':
+        form=dateForm(request.POST)
+
+        if form.is_valid():
+            f=form.cleaned_data
+            ## now f is a dictionary
+            dateFrom=f.get('fromdate')
+            dateTo=f.get('todate')
+            ## filter by start and stop date
+            milk=mPurchase.objects.filter(mPurchase_date__gte=dateFrom,
+                                          mPurchase_date__lte=dateTo).order_by('-mPurchase_date')
+
+            if not milk:
+                messages.info(request, 'No Records Found')
+
+
+    else:
+        form = dateForm()
+
+    context = {
+        'title': title,
+        'form': form,
+        'milk': milk,
+    }
+    return render(request,'dairyapp/purchase-report.html',context)
+
+def stockReport(request):
+    title='Stock Report'
+
+    context={
+        'title':title
+    }
+    return render(request, 'dairyapp/stock-report.html',context)
+
+def salesReport(request):
+    title='Sales Report'
+
+    context={
+        'title':title
+    }
+    return render(request,'dairyapp/sales-report.html',context)
+
+def operationCostReport(request):
+    title='Operation Cost Report'
+
+    context={
+        'title':title
+    }
+    return render(request,'dairyapp/operationcost-report.html',context)
+
 
 def test(request):
     title='TEST'
