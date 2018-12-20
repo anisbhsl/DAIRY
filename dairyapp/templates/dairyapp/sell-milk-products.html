@@ -1,6 +1,5 @@
 {% extends 'dairyapp/base.html' %}
 {% load static %}
-{% load dateconvert_tags %}
 {% load widget_tweaks %}
 
 {% block extra-css %}
@@ -89,6 +88,7 @@
                     {% endfor %}
                   </ul>
                 {% endif %}
+            </form>
 
 
         </div>
@@ -111,7 +111,7 @@
                     <tbody class="active">
                         {% for sale in sales %}
                           <tr class="myclass">
-                            <td>{% bsconverter sale.mProductSell_date %}</td>
+                            <td>{{ sale.mProductSell_date|date:"Y-m-d" }}</td>
                             <td>{{ sale.buyer_name }}</td>
                             <td>{{ sale.milk_product }}</td>
                             <td>{{ sale.mProductSell_qty }} {{ sale.mProductSell_qtyunit }}</td>

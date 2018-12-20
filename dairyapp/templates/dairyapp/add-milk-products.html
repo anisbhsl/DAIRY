@@ -1,5 +1,4 @@
 {% extends 'dairyapp/base.html' %}
-
 {% load static %}
 {% load widget_tweaks %}
 
@@ -84,6 +83,17 @@
                              <button type="submit" class="btn btn-primary btn-block" onclick="if (!confirm('Are you sure?')) { return false }"><strong>Add Stock</strong></button>
                         </div>
                      </div>
+
+                    {% if messages %}
+                          <ul class="messages">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">
+                                 <a class="close" href="#" data-dismiss="alert">×</a>
+                                <li class="text-info">{{ message }}</li>
+                                </div>
+                            {% endfor %}
+                          </ul>
+                    {% endif %}
 
                 </form>
 
