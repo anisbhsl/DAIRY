@@ -1,5 +1,5 @@
 from .forms import mPurchaseForm,mStockForm,mProductSellForm, operationCostForm,testForm,dateForm
-from .models import mPurchase,mProduct,mStock, mProductSell,test
+from .models import mPurchase,mProduct,mStock, mProductSell, mProduct, mProductUnit,test
 from .models import operationCost as operationCostModel
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -282,27 +282,110 @@ def purchaseReport(request):
 
 def stockReport(request):
     title='Stock Report'
+    stock = mStock.objects.all().order_by('-mStock_date')[:10]
 
-    context={
-        'title':title
+    if request.method == 'POST':
+        form = dateForm(request.POST)
+
+        if form.is_valid():
+            f = form.cleaned_data
+            ## now f is a dictionary
+            dateFrom = f.get('fromdate')
+            dateTo = f.get('todate')
+            ## filter by start and stop date
+            stock = mStock.objects.filter(mStock_date__gte=dateFrom,
+                                            mStock_date__lte=dateTo).order_by('-mStock_date')
+
+            if not stock:
+                messages.info(request, 'No Records Found')
+
+
+    else:
+        form = dateForm()
+
+    context = {
+        'title': title,
+        'form': form,
+        'stock': stock,
     }
     return render(request, 'dairyapp/stock-report.html',context)
 
 def salesReport(request):
     title='Sales Report'
 
-    context={
-        'title':title
+    sales = mProductSell.objects.all().order_by('-mProductSell_date')[:10]
+
+    if request.method == 'POST':
+        form = dateForm(request.POST)
+
+        if form.is_valid():
+            f = form.cleaned_data
+            ## now f is a dictionary
+            dateFrom = f.get('fromdate')
+            dateTo = f.get('todate')
+            ## filter by start and stop date
+            sales = mProductSell.objects.filter(mProductSell_date__gte=dateFrom,
+                                          mProductSell_date__lte=dateTo).order_by('-mProductSell_date')
+
+            ## if no records found
+            if not sales:
+                messages.info(request, 'No Records Found')
+
+
+    else:
+        form = dateForm()
+
+    context = {
+        'title': title,
+        'form': form,
+        'sales': sales,
     }
     return render(request,'dairyapp/sales-report.html',context)
 
 def operationCostReport(request):
     title='Operation Cost Report'
+    operations = operationCostModel.objects.all().order_by('-date')[:10]
 
-    context={
-        'title':title
+    if request.method == 'POST':
+        form = dateForm(request.POST)
+
+        if form.is_valid():
+            f = form.cleaned_data
+            ## now f is a dictionary
+            dateFrom = f.get('fromdate')
+            dateTo = f.get('todate')
+            ## filter by start and stop date
+            operations = operationCostModel.objects.filter(date__gte=dateFrom,
+                                            date__lte=dateTo).order_by('-date')
+
+            if not operations:
+                messages.info(request, 'No Records Found')
+
+
+    else:
+        form = dateForm()
+
+    context = {
+        'title': title,
+        'form': form,
+        'operations': operations,
     }
     return render(request,'dairyapp/operationcost-report.html',context)
+
+
+def settings(request):
+    title='Settings'
+
+    products=mProduct.objects.all()
+    units=mProductUnit.objects.all()
+
+    context={
+        'title':title,
+        'products':products,
+        'units':units,
+    }
+
+    return  render(request,'dairyapp/settings/index.html',context)
 
 
 def test(request):
