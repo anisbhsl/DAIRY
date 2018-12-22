@@ -48,33 +48,52 @@
 	position:relative;
 	top:1px;
 }
+
+
+.myfont{
+            font-size: 18px;
+
+
+        }
+
+tr:hover{
+
+            font-weight: bolder;
+}
 </style>
 
 
 {% endblock %}
 
 {% block main-content %}
-    <!-- Purchase Report Here -->
+
     <div class="row">
         <h2 class="col-lg-offset-1"><strong>{{ title }}</strong></h2>
+        <div class="col-lg-10 col-lg-offset-2">
+        <div class="modal fade" tabindex="-1"  style="width:800px;margin:0 auto;" role="dialog" id="modal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
 
-    </div>
-
-    <div class="row" style="margin-top: 20px;">
-        <div class="col-lg-4 col-lg-offset-1">
-
-            <a href="#" class="myButton">Add New Product Name</a>
+            </div>
+          </div>
+        </div>
+        <button class="create-product myButton" type="button" name="button">Create/Add new Product</button>
         </div>
     </div>
+    <!--create new product ends here-->
+    <!-- create new product unit starts here -->
+    <div class="row " style="margin-top: 20px;">
+        <div class="col-lg-10 col-lg-offset-2">
 
-    <div class="row" style="margin-top: 20px;">
-        <div class="col-lg-4 col-lg-offset-1">
+                <a href="{% url 'dairyapp:create-product-unit' %}" >
 
-            <a href="#" class="myButton">Add New Product Unit</a>
+                  <button class="myButton" type="button" name="button">Create/Add new Product Unit</button>
+                </a>
+
         </div>
 
-
     </div>
+    <!-- create new product unit ends here-->
 
     <div class="row" style="margin-top: 20px;">
         <div class="col-lg-4 col-lg-offset-1">
@@ -88,7 +107,7 @@
 
                       </tr>
                     </thead>
-                    <tbody class="active">
+                    <tbody class="active myfont">
                     {% for product in products %}
                        <tr>
                            <td>{{ product.mProduct_name }}</td>
@@ -113,7 +132,7 @@
 
                       </tr>
                     </thead>
-                    <tbody class="active">
+                    <tbody class="active myfont">
                     {% for unit in units %}
                        <tr>
                            <td>{{ unit.mProductUnit_name }}</td>
@@ -129,6 +148,20 @@
 {% endblock %}
 
 {% block extra-js %}
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
 
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $(".create-product").modalForm({
+                formURL: "{% url 'dairyapp:create-product' %}"
+            });
+
+
+
+
+        });
+
+    </script>
 
 {% endblock %}

@@ -1,7 +1,8 @@
 from django import forms
-from .models import mProduct,mPurchase, mStock, mProductSell, operationCost,test
+from .models import mProduct,mProductUnit,mPurchase, mStock, mProductSell, operationCost,test
 from dairyapp.choices import MILK_CHOICES
 import datetime
+from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
 
 
 class mPurchaseForm(forms.ModelForm):
@@ -190,6 +191,7 @@ class mProductSellForm(forms.ModelForm):
         fields=('buyer_name','milk_product','mProductSell_date','mProductSell_qty', 'mProductSell_rate',)
 
 
+## operation cost form
 class operationCostForm(forms.ModelForm):
     """
         This form is for operational costs!
@@ -245,17 +247,9 @@ class operationCostForm(forms.ModelForm):
 
         return self.cleaned_data
 
-##form to select date in report
 
-# def selectdate(model,fields):
-#
-#     class _CustomForm(forms.ModelForm):
-#         class Meta:
-#             model=model
-#             fields=fields
-#
-#     return _CustomForm
 
+##nepali date selection form
 class dateForm(forms.Form):
 
     fromdate=forms.DateField(
@@ -293,6 +287,33 @@ class dateForm(forms.Form):
         fields=('fromdate','todate')
 
 
+##popup forms for settings
+
+class addProductForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    mProduct_name=forms.CharField(
+        label='Product Name'
+    )
+
+    mProduct_qtyunit=forms.ModelChoiceField(
+        label='Select Unit Type',
+        queryset=mProductUnit.objects.filter(),
+    )
+    class Meta:
+        model = mProduct
+        fields = ['mProduct_name', 'mProduct_qtyunit']
+
+## add /create product unit form
+class addProductUnitForm(forms.ModelForm):
+    mProductUnit_name=forms.CharField(
+        label='Product Unit Name'
+    )
+
+    class Meta:
+        model = mProductUnit
+        fields = ['mProductUnit_name']
+
+
+### test form
 class testForm(forms.ModelForm):
     name=forms.CharField(
         label='name'
