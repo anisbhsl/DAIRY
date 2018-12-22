@@ -2,3 +2,4 @@ Django==2.1
 bikram
 django-widget-tweaks==1.4.3
 django-filter
+bootstrap_modal_forms

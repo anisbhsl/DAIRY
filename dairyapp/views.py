@@ -1,13 +1,16 @@
-from .forms import mPurchaseForm,mStockForm,mProductSellForm, operationCostForm,testForm,dateForm
+from .forms import mPurchaseForm,mStockForm,mProductSellForm, operationCostForm,testForm,dateForm, addProductForm,addProductUnitForm
 from .models import mPurchase,mProduct,mStock, mProductSell, mProduct, mProductUnit,test
 from .models import operationCost as operationCostModel
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.views import generic
+from django.urls import reverse_lazy
 from django.core.paginator import Paginator
-from dateutil import parser
+from django.contrib.messages.views import SuccessMessageMixin
+from bootstrap_modal_forms.mixins import PassRequestMixin
 
 
-
+## index view
 def index(request):
     title='DAIRY'
     context={
@@ -15,6 +18,7 @@ def index(request):
     }
     return render(request,'dairyapp/index.html',context)
 
+##milk purchase view
 def milkPurchase(request):
     title='Buy Milk'
     milk_list = mPurchase.objects.all().order_by('-mPurchase_date')
@@ -131,7 +135,7 @@ def mStockDetailView(request,id):
 
     #return render(request, 'dairyapp/stock-details.html', context)
 
-
+## sell milk products view
 def sellMilkProducts(request):
     title='Sell Milk Products'
     sales_list=mProductSell.objects.all().order_by('-mProductSell_date')
@@ -194,7 +198,7 @@ def mProductSellDelete(request,id):
 
     return redirect('/sellmilkproducts')
 
-
+## operation cost view
 def operationCost(request):
     title='Operation Cost'
     operations_list=operationCostModel.objects.all().order_by('-date')
@@ -250,6 +254,7 @@ def report(request):
     }
     return render(request,'dairyapp/report.html',context)
 
+## purchase report
 def purchaseReport(request):
     title='Purchase Report'
     milk=mPurchase.objects.all().order_by('-mPurchase_date')[:10]
@@ -280,6 +285,7 @@ def purchaseReport(request):
     }
     return render(request,'dairyapp/purchase-report.html',context)
 
+##stock report
 def stockReport(request):
     title='Stock Report'
     stock = mStock.objects.all().order_by('-mStock_date')[:10]
@@ -310,6 +316,7 @@ def stockReport(request):
     }
     return render(request, 'dairyapp/stock-report.html',context)
 
+##sales report
 def salesReport(request):
     title='Sales Report'
 
@@ -342,6 +349,8 @@ def salesReport(request):
     }
     return render(request,'dairyapp/sales-report.html',context)
 
+
+## opeartion cost report
 def operationCostReport(request):
     title='Operation Cost Report'
     operations = operationCostModel.objects.all().order_by('-date')[:10]
@@ -372,7 +381,7 @@ def operationCostReport(request):
     }
     return render(request,'dairyapp/operationcost-report.html',context)
 
-
+## settings view
 def settings(request):
     title='Settings'
 
@@ -387,6 +396,35 @@ def settings(request):
 
     return  render(request,'dairyapp/settings/index.html',context)
 
+## create/add new product name view
+class newProductCreateView(PassRequestMixin, SuccessMessageMixin,
+                     generic.CreateView):
+    template_name = 'dairyapp/settings/add-product.html'
+    form_class = addProductForm
+    success_message = 'Success: Product was created.'
+    success_url = '/settings/'
+
+##create/add new product unit name view
+def newProductUnitCreate(request):
+    title='Create New Product Unit'
+
+    if request.method == 'POST':
+        form = addProductUnitForm(request.POST)
+
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.save()
+            return redirect('/settings')
+
+    else:
+        form = addProductUnitForm()
+
+    context = {
+        'title': title,
+        'form':form
+    }
+
+    return render(request,'dairyapp/settings/add-unit.html',context)
 
 def test(request):
     title='TEST'
@@ -399,8 +437,6 @@ def test(request):
             ## commit = False means it gives object that has not been saved in db yet
 
             date=form.cleaned_data.get('data')
-
-
             m.save()
             return redirect('/test')
 

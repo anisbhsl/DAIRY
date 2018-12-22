@@ -19,8 +19,9 @@ urlpatterns=[
     path('report/salesreport/',views.salesReport,name='sales-report'),
     path('report/operationcostreport',views.operationCostReport,name='operationcost-report'),
     path('settings/',views.settings,name='settings'),
+    path('settings/createproduct',views.newProductCreateView.as_view(), name='create-product'),
+    path('settings/createproductunit',views.newProductUnitCreate, name='create-product-unit'),
     path('test/',views.test,name='test'),
     #path('stockrecords/<id>/delete',views.mStockRecordDelete,name='delete-stock-records'),
-
 
 ]
