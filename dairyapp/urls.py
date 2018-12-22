@@ -18,6 +18,7 @@ urlpatterns=[
     path('report/stockreport/',views.stockReport,name='stock-report'),
     path('report/salesreport/',views.salesReport,name='sales-report'),
     path('report/operationcostreport',views.operationCostReport,name='operationcost-report'),
+    path('settings/',views.settings,name='settings'),
     path('test/',views.test,name='test'),
     #path('stockrecords/<id>/delete',views.mStockRecordDelete,name='delete-stock-records'),
 
