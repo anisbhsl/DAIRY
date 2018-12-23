@@ -2,8 +2,7 @@
 
 ### DAIRY RECORD MANAGEMENT AND PRODUCTION DATA ANALYTICS SYSTEM
 
-A complete record tracking and production data analytics for dairy industries. This project has been
-developed as per the requirements of Argha Dairy Udhyog, Nepal.
+A complete record tracking and production data analytics for dairy industries. 
 
 #### Install Instructions
 
