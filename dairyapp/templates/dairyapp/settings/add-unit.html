@@ -1,0 +1,75 @@
+
+{% extends 'dairyapp/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block main-content %}
+    <h2><strong>{{ title }}</strong></h2>
+    <div class="row">
+        <div class="col-lg-5 col-lg-offset-1">
+            <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+
+                {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field }}
+                {% endfor %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+
+                    <div class="form-group">
+
+                        {{ field.label_tag }}
+                        {% if form.is_bound %}
+                            {% if field.errors %}
+
+                                {% render_field field class="form-control is-invalid"%}
+
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback text-danger">
+                                         {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            {% else %}
+                                   {% render_field field class="form-control is-valid" %}
+                            {% endif %}
+
+                        {% else %}
+                               {% render_field field class="form-control" %}
+                        {% endif %}
+
+                    {% if field.help_text %}
+
+                        <small class="form-text text-primary">{{ field.help_text }}</small>
+                    {% endif %}
+
+                    </div>
+                {% endfor %}
+
+
+
+                <div class="form-group">
+                    <div class="col-sm-12" onclick="if (!confirm('Are you sure?')) { return false }">
+                         <button type="submit" class="btn btn-primary btn-block" >
+                             <strong>Create</strong>
+                         </button>
+                    </div>
+                 </div>
+
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}

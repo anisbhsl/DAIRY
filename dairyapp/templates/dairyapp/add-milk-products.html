@@ -1,169 +1,168 @@
 {% extends 'dairyapp/base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block extra-css %}
+    <style>
+
+        tr{
+            font-size: larger;
+        }
+        tr:hover{
+            cursor: pointer;
+            color: #1b6d85;
+            font-weight: bolder;
+        }
+
+
+    </style>
 
 
 {% endblock %}
 {% block main-content %}
     <!-- main content-->
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-offset-1 col-lg-4">
 
             <h2><strong>Add Stock</strong></h2>
 
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label class="control-label col-sm-2"><strong>Product</strong></label>
-                            <div class="col-sm-10">
-                                    <select name="milk-products">
-                                        <option value="milk cow open">Milk Cow Open</option>
-                                        <option value="milk cow packet">Milk Cow Packet</option>
-                                        <option value="milk buffalo open">Milk Buffalo Open</option>
-                                        <option value="milk buffalo packet">Milk Buffalo Packet</option>
-                                        <option value="cow ghee">Cow Ghee</option>
-                                        <option value="buffalo ghee">Buffalo Ghee</option>
-                                        <option value="panir">Panir</option>
-                                        <option value="ice cream">Ice Cream</option>
-                                    </select>
-                            </div>
+                <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {{ form.non_field_errors }}
+
+                    {% for hidden_field in form.hidden_fields %}
+                        {{ hidden_field }}
+                    {% endfor %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+
+                            {% endfor %}
                         </div>
+                    {% endif %}
 
-
-                        <div class="form-group">
-                            <label class="control-label col-sm-2"><strong>Quantity</strong></label>
-                            <div class="col-sm-4">
-                                    <input type="number" class="form-control"  placeholder="Add Quantity">
-                            </div>
-                        </div>
-
+                    {% for field in form %}
 
                         <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-primary btn-block"><strong>Submit</strong></button>
-                            </div>
+
+                            {{ field.label_tag }}
+                            {% if form.is_bound %}
+                                {% if field.errors %}
+
+                                    {% render_field field class="form-control is-invalid"%}
+
+                                    {% for error in field.errors %}
+                                        <div class="invalid-feedback text-danger">
+                                             {{ error }}
+                                        </div>
+                                    {% endfor %}
+
+                                {% else %}
+                                       {% render_field field class="form-control is-valid" %}
+                                {% endif %}
+
+                            {% else %}
+                                   {% render_field field class="form-control" %}
+                            {% endif %}
+
+                        {% if field.help_text %}
+
+                            <small class="form-text text-primary">{{ field.help_text }}</small>
+                        {% endif %}
+
                         </div>
-                    </form>
+                    {% endfor %}
+
+
+
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                             <button type="submit" class="btn btn-primary btn-block" onclick="if (!confirm('Are you sure?')) { return false }"><strong>Add Stock</strong></button>
+                        </div>
+                     </div>
+
+                    {% if messages %}
+                          <ul class="messages">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">
+                                 <a class="close" href="#" data-dismiss="alert">×</a>
+                                <li class="text-info">{{ message }}</li>
+                                </div>
+                            {% endfor %}
+                          </ul>
+                    {% endif %}
+
+                </form>
+
 
         </div>
 
 
-        <div class="col-lg-7">
+        <div class="col-lg-offset-1 col-lg-6">
             <div class="row">
-                <h2><strong>View Stock Products</strong></h2>
-                <form class="form-horizontal">
-                            <div class="form-group">
-                                <label class="control-label col-sm-2"><strong>Select Product</strong></label>
-                                <div class="col-sm-10">
-                                        <select name="milk-products">
-                                            <option value="milk cow open">Milk Cow Open</option>
-                                            <option value="milk cow packet">Milk Cow Packet</option>
-                                            <option value="milk buffalo open">Milk Buffalo Open</option>
-                                            <option value="milk buffalo packet">Milk Buffalo Packet</option>
-                                            <option value="cow ghee">Cow Ghee</option>
-                                            <option value="buffalo ghee">Buffalo Ghee</option>
-                                            <option value="panir">Panir</option>
-                                            <option value="ice cream">Ice Cream</option>
-                                        </select>
-                                </div>
-                            </div>
-
-
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-success"><strong>View Stock</strong></button>
-                                </div>
-                            </div>
-                </form>
-            </div>
-            <div class="row">
-                <table class="table table-striped table-hover">
+                <h2><strong>Stock Products</strong></h2>
+                <table class="table table-striped table-hover table-responsive ">
                     <thead>
                       <tr class="info">
-                        <th>Date Added</th>
-                        <th>Product</th>
-                        <th>Quanity Available</th>
+
+                        <th>Products</th>
+                        <th>Total Quantity in Stock</th>
 
                       </tr>
                     </thead>
                     <tbody class="active">
-                      <tr>
-                        <td>{{ bs_date }}</td>
-                        <td></td>
-                        <td></td>
 
-                      </tr>
+                    {% for p in product %}
+
+                          <tr class="clickable-row bg-danger" data-href="{% url 'dairyapp:stock-detail' id=p.mProduct_id %}">
+                              <td>{{p.mProduct_name}}</td>
+                            <td>{{p.mProduct_qty}}  {{ p.mProduct_qtyunit }}</td>
+                          </tr>
+
+                    {% endfor %}
 
                     </tbody>
                 </table>
+                <p class="text-primary" style="font-size: 20px;">Click on products to see logs (हरेक सामनको स्टक रेकर्ड हेर्न उक्त उत्पादनमा क्लिक गर्नुहोस्)</p>
             </div>
 
 
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-5">
-
-            <h2><strong>Analytics</strong></h2>
-
-            <div id="graph-container"></div>
         </div>
     </div>
 
 {% endblock %}
 
 {% block extra-js %}
-     <script src="{% static 'js/highcharts.js' %}"></script>
     <script>
 
-        Highcharts.chart('graph-container', {
+           $(document).ready(function(){
+               $('.clickable-row').click(function () {
+                   window.location=$(this).data('href');
+               });
+           });
 
-            title: {
-                text: 'Milk Production of last 7 days'
-            },
+    </script>
 
-            yAxis: {
-                title: {
-                    text: 'Liters'
-                }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle'
-            },
+    <script>
 
-            plotOptions: {
-                series: {
-                    label: {
-                        connectorAllowed: false
-                    },
-                    pointStart: 1
-                }
-            },
-
-            series: [{
-                name: 'Total Milk',
-                data: [400, 525, 571, 696, 970, 793, 713]
-            }
-            ],
-
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 100
-                    },
-                    chartOptions: {
-                        legend: {
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom'
-                        }
-                    }
-                }]
-            }
+        $('#nepalicalendar').nepaliDatePicker({
+            onFocus:false,
+            ndpTriggerButton: true,
+            ndpTriggerButtonText: 'Date',
+            npdMonth:true,
+            npdYearCount:10,
+            ndpTriggerButtonClass: 'btn btn-primary btn-sm',
+            /*disableBefore:'03/05/2075', //MM/DD/YYYY */
+            disableDaysAfter:'1'
 
         });
+
+
     </script>
+
+
 
 {% endblock %}

@@ -7,3 +7,4 @@ def sendBS(request):
     return {
         'bs_date':bs_date
     }
+

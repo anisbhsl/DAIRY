@@ -1,0 +1,76 @@
+{% extends 'dairyapp/base.html' %}
+{% load static %}
+
+{% block extra-css %}
+
+{% endblock %}
+
+{% block main-content %}
+<div class="row">
+    <div class="col-lg-10 col-lg-offset-1">
+           <h3 class="bg-primary"><strong>VIEW REPORTS</strong></h3>
+        <h4 class="text-info bg-important"><strong>Select the report of your choice! </strong></h4>
+
+        <!-- first row of info boxes starts here -->
+        <div class="row">
+            <a href="{% url 'dairyapp:purchase-report' %}">
+                <div class="col-lg-3">
+                    <div class="info-box blue-bg" >
+                      <i class="fa fa-bar-chart-o"></i>
+                      <div class="count">1</div>
+                      <div>Milk Purchase Report</div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="{% url 'dairyapp:stock-report' %}">
+                <div class="col-lg-3">
+                    <div class="info-box blue-bg">
+                      <i class="fa fa-bars"></i>
+                      <div class="count">2</div>
+                      <div>Stock Report</div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="{% url 'dairyapp:sales-report' %}">
+                <div class="col-lg-3">
+                    <div class="info-box blue-bg">
+                      <i class="fa fa-signal"></i>
+                      <div class="count">3</div>
+                      <div>Sales Report</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- first row of infoboxes ends here -->
+
+        <!-- second row of infoboxes stars here -->
+
+        <div class="row">
+            <a href="{% url 'dairyapp:operationcost-report' %}">
+                <div class="col-lg-3">
+                    <div class="info-box blue-bg">
+                      <i class="fa fa-dollar"></i>
+                      <div class="count">4</div>
+                      <div>Operation Cost Report</div>
+                    </div>
+                </div>
+            </a>
+
+
+        </div>
+        <!-- second row of info boxes ends here -->
+
+
+    </div>
+</div>
+
+
+</div>
+
+{% endblock main-content %}
+
+{% block extra-js %}
+{% endblock %}

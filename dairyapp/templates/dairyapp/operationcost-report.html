@@ -1,0 +1,173 @@
+{% extends 'dairyapp/base.html' %}
+
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block extra-css %}
+
+
+{% endblock %}
+
+{% block main-content %}
+    <!-- Purchase Report Here -->
+    <div class="row">
+
+        <div class="col-lg-4 col-lg-offset-1">
+        <h2><strong>{{ title }}</strong></h2>
+        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+
+                {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field }}
+                {% endfor %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+
+                    <div class="form-group">
+
+                        {{ field.label_tag }}
+                        {% if form.is_bound %}
+                            {% if field.errors %}
+
+                                {% render_field field class="form-control is-invalid"%}
+
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback text-danger">
+                                         {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            {% else %}
+                                   {% render_field field class="form-control is-valid" %}
+                            {% endif %}
+
+                        {% else %}
+                               {% render_field field class="form-control" %}
+                        {% endif %}
+
+                    {% if field.help_text %}
+
+                        <small class="form-text text-primary">{{ field.help_text }}</small>
+                    {% endif %}
+
+                    </div>
+                {% endfor %}
+
+
+
+                <div class="form-group">
+                    <div class="col-sm-12" onclick="if (!confirm('Are you sure?')) { return false }">
+                         <button type="submit" class="btn btn-primary btn-block" >
+                             <strong>View Report</strong>
+                         </button>
+                    </div>
+                 </div>
+
+
+
+
+            </form>
+
+        </div>
+        <div class="col-lg-4">
+            {% if messages %}
+                  <ul class="messages">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                         <a class="close" href="#" data-dismiss="alert">×</a>
+                        <li class="text-danger">{{ message }}</li>
+                        </div>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+        </div>
+
+    </div>
+
+    <!-- set a condition to display table -->
+    <div class="row" style="margin-top: 20px;">
+        <div class="table-responsive col-lg-10">
+              <table class="table table-striped table-hover" id="tableData">
+                    <thead>
+                      <tr class="info">
+                        <th>Date</th>
+                        <th>Particulars</th>
+                        <th>Quanity</th>
+                        <th> Rate</th>
+                        <th>Total Amount(NRs)</th>
+
+                      </tr>
+                    </thead>
+                    <tbody class="active">
+                    {% for op in operations %}
+                      <tr class="myclass">
+                        <td>{{ op.date |date:"Y-m-d" }}</td>
+                        <td>{{ op.particular }}</td>
+                        <td>{{ op.qty }}</td>
+                        <td>{{ op.rate }}</td>
+                        <td>{{ op.amount }}</td>
+                      </tr>
+                    {% endfor %}
+
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra-js %}
+<script>
+    $('#nepalicalendar').nepaliDatePicker({
+            onFocus:false,
+            ndpTriggerButton: true,
+            ndpTriggerButtonText: 'Date',
+            npdMonth:true,
+            npdYearCount:10,
+            ndpTriggerButtonClass: 'btn btn-primary btn-sm',
+            /*disableBefore:'03/05/2075', //MM/DD/YYYY */
+            disableDaysAfter:'1'
+
+        });
+
+    $('#nepalicalendar2').nepaliDatePicker({
+            onFocus:false,
+            ndpTriggerButton: true,
+            ndpTriggerButtonText: 'Date',
+            npdMonth:true,
+            npdYearCount:10,
+            ndpTriggerButtonClass: 'btn btn-primary btn-sm',
+            /*disableBefore:'03/05/2075', //MM/DD/YYYY */
+            disableDaysAfter:'1'
+
+        });
+</script>
+
+<script>
+    $(document).ready(function() {
+    $('#tableData').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+              'excel', 'print'
+        ],
+        "ordering":false
+    } );
+} );
+
+
+</script>
+
+
+{% endblock %}

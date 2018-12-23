@@ -3,22 +3,21 @@
 {% load widget_tweaks %}
 
 {% block extra-css %}
-<style>
+
+    <style>
     .myclass{
         font-size:large;
     }
     .myclass:hover{
         font-weight:bold;
     }
-</style>
-
+    </style>
 {% endblock %}
 
 {% block main-content %}
     <div class="row">
-
         <div class="col-lg-4 col-lg-offset-1">
-            <h2><strong>Sell Products सामन बिक्री</strong></h2>
+            <h2><strong>Operational Costs</strong></h2>
 
             <form class="form-horizontal" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -73,7 +72,7 @@
 
 
                 <div class="form-group">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12" onclick="if (!confirm('Do you want to confirm?')) { return false }">
                          <button type="submit" class="btn btn-primary btn-block"><strong>Submit</strong></button>
                     </div>
                  </div>
@@ -88,20 +87,17 @@
                     {% endfor %}
                   </ul>
                 {% endif %}
-            </form>
 
 
         </div>
+
         <div class="col-lg-7">
-            <h2><strong>Showing 10 Latest Sales</strong></h2>
-
-
-            <table class="table table-striped table-hover table-responsive">
+            <h2><strong>Showing top 10 Operational Costs</strong></h2>
+            <table class="table table-striped table-hover">
                     <thead>
-                      <tr class="bg-success">
+                      <tr class="info">
                         <th>Date</th>
-                        <th>Buyer Name</th>
-                        <th>Product</th>
+                        <th>Particulars</th>
                         <th>Quanity</th>
                         <th> Rate</th>
                         <th>Total Amount(NRs)</th>
@@ -109,73 +105,73 @@
                       </tr>
                     </thead>
                     <tbody class="active">
-                        {% for sale in sales %}
-                          <tr class="myclass">
-                            <td>{{ sale.mProductSell_date|date:"Y-m-d" }}</td>
-                            <td>{{ sale.buyer_name }}</td>
-                            <td>{{ sale.milk_product }}</td>
-                            <td>{{ sale.mProductSell_qty }} {{ sale.mProductSell_qtyunit }}</td>
-                            <td>{{ sale.mProductSell_rate }}</td>
-                            <td>{{ sale.mProductSell_amount }}</td>
-                              <td onclick="if (!confirm('Do you want to confirm?')) { return false }">
-                                  <a href="{% url 'dairyapp:delete-sales' id=sale.mProductSell_id %}" class="btn btn-primary">
-                                    <strong>Delete</strong>
-                                </a>
-                              </td>
-                          </tr>
-                        {% endfor %}
+                    {% for op in operations %}
+                      <tr class="myclass">
+                        <td>{{ op.date |date:"Y-m-d" }}</td>
+                        <td>{{ op.particular }}</td>
+                        <td>{{ op.qty }}</td>
+                        <td>{{ op.rate }}</td>
+                        <td>{{ op.amount }}</td>
+                          <td onclick="if (!confirm('Do you want to confirm?')) { return false }">
+                              <a href="{% url 'dairyapp:delete-operation-cost' id=op.operationCost_id %}" class="btn btn-primary">
+                                <strong>Delete</strong>
+                            </a>
+                          </td>
+                      </tr>
+                    {% endfor %}
 
                     </tbody>
             </table>
 
-
-            {% if sales.has_other_pages %}
-                <ul class="pagination">
-                    {% if sales.has_previous %}
-                        <li>
-                            <a href="?page={{ sales.previous_page_number }}">&laquo;</a>
+            {% if operations.has_other_pages %}
+            <ul class="pagination">
+                {% if operations.has_previous %}
+                    <li>
+                        <a href="?page={{ operations.previous_page_number }}">&laquo;</a>
+                    </li>
+                {% else %}
+                    <li class="disabled">
+                        <span>&laquo;</span>
+                    </li>
+                {% endif %}
+                {% for i in operations.paginator.page_range %}
+                    {% if operations.number == i %}
+                        <li class="active">
+                            <span>{{ i }}
+                            <span class="sr-only">(current)</span>
+                            </span>
                         </li>
                     {% else %}
-                        <li class="disabled">
-                            <span>&laquo;</span>
-                        </li>
-                    {% endif %}
-                    {% for i in sales.paginator.page_range %}
-                        {% if sales.number == i %}
-                            <li class="active">
-                                <span>{{ i }}
-                                <span class="sr-only">(current)</span>
-                                </span>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a href="?page={{ i }}">{{ i }}</a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if sales.has_next %}
                         <li>
-                            <a href="?page={{ sales.next_page_number }}">&raquo;</a>
-                        </li>
-                    {% else %}
-                        <li class="disabled">
-                            <span>&raquo;</span>
+                            <a href="?page={{ i }}">{{ i }}</a>
                         </li>
                     {% endif %}
+                {% endfor %}
 
-                </ul>
+                {% if operations.has_next %}
+                    <li>
+                        <a href="?page={{ operations.next_page_number }}">&raquo;</a>
+                    </li>
+                {% else %}
+                    <li class="disabled">
+                        <span>&raquo;</span>
+                    </li>
+                {% endif %}
+
+            </ul>
             {% endif %}
 
 
         </div>
+
     </div>
 
-{% endblock %}
+
+{% endblock main-content %}
 
 {% block extra-js %}
- <script>
-    //script for nepali calendar date integration
+    <script>
+    //script for nepali calendar integration
 
         $('#nepalicalendar').nepaliDatePicker({
             onFocus:false,
@@ -190,6 +186,5 @@
         });
 
 
-</script>
-
+    </script>
 {% endblock %}

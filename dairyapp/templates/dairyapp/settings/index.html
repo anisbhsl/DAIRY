@@ -1,0 +1,167 @@
+{% extends 'dairyapp/base.html' %}
+
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block extra-css %}
+
+<style>
+
+.myButton {
+	-moz-box-shadow:inset 0px 0px 0px 0px #caefab;
+	-webkit-box-shadow:inset 0px 0px 0px 0px #caefab;
+	box-shadow:inset 0px 0px 0px 0px #caefab;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #77d42a), color-stop(1, #5cb811));
+	background:-moz-linear-gradient(top, #77d42a 5%, #5cb811 100%);
+	background:-webkit-linear-gradient(top, #77d42a 5%, #5cb811 100%);
+	background:-o-linear-gradient(top, #77d42a 5%, #5cb811 100%);
+	background:-ms-linear-gradient(top, #77d42a 5%, #5cb811 100%);
+	background:linear-gradient(to bottom, #77d42a 5%, #5cb811 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77d42a', endColorstr='#5cb811',GradientType=0);
+	background-color:#77d42a;
+	-moz-border-radius:24px;
+	-webkit-border-radius:24px;
+	border-radius:24px;
+	border:1px solid #268a16;
+	display:inline-block;
+	cursor:pointer;
+	color:#306108;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:13px 53px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #aade7c;
+}
+.myButton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #5cb811), color-stop(1, #77d42a));
+	background:-moz-linear-gradient(top, #5cb811 5%, #77d42a 100%);
+	background:-webkit-linear-gradient(top, #5cb811 5%, #77d42a 100%);
+	background:-o-linear-gradient(top, #5cb811 5%, #77d42a 100%);
+	background:-ms-linear-gradient(top, #5cb811 5%, #77d42a 100%);
+	background:linear-gradient(to bottom, #5cb811 5%, #77d42a 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#5cb811', endColorstr='#77d42a',GradientType=0);
+	background-color:#5cb811;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+
+.myfont{
+            font-size: 18px;
+
+
+        }
+
+tr:hover{
+
+            font-weight: bolder;
+}
+</style>
+
+
+{% endblock %}
+
+{% block main-content %}
+
+    <div class="row">
+        <h2 class="col-lg-offset-1"><strong>{{ title }}</strong></h2>
+        <div class="col-lg-10 col-lg-offset-2">
+        <div class="modal fade" tabindex="-1"  style="width:800px;margin:0 auto;" role="dialog" id="modal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+            </div>
+          </div>
+        </div>
+        <button class="create-product myButton" type="button" name="button">Create/Add new Product</button>
+        </div>
+    </div>
+    <!--create new product ends here-->
+    <!-- create new product unit starts here -->
+    <div class="row " style="margin-top: 20px;">
+        <div class="col-lg-10 col-lg-offset-2">
+
+                <a href="{% url 'dairyapp:create-product-unit' %}" >
+
+                  <button class="myButton" type="button" name="button">Create/Add new Product Unit</button>
+                </a>
+
+        </div>
+
+    </div>
+    <!-- create new product unit ends here-->
+
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-lg-4 col-lg-offset-1">
+            <h4><strong>Current Products</strong>
+            <p>eg.: Cow Milk, Panir, Ghee,...</p>
+             <table class="table table-striped table-hover table-responsive">
+                    <thead>
+                      <tr class="bg-success">
+                        <th>Product Name</th>
+                        <th>Unit</th>
+
+                      </tr>
+                    </thead>
+                    <tbody class="active myfont">
+                    {% for product in products %}
+                       <tr>
+                           <td>{{ product.mProduct_name }}</td>
+                           <td>{{ product.mProduct_qtyunit }}</td>
+                       </tr>
+                    {% endfor %}
+
+                    </tbody>
+            </table>
+
+
+
+        </div>
+
+        <div class="col-lg-4 col-lg-offset-1">
+            <h4><strong>Product Units</strong></h4>
+            <p>eg.: Kg, Ltr,...</p>
+            <table class="table table-striped table-hover table-responsive">
+                    <thead>
+                      <tr class="bg-success">
+                        <th>Unit</th>
+
+                      </tr>
+                    </thead>
+                    <tbody class="active myfont">
+                    {% for unit in units %}
+                       <tr>
+                           <td>{{ unit.mProductUnit_name }}</td>
+                       </tr>
+                    {% endfor %}
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block extra-js %}
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $(".create-product").modalForm({
+                formURL: "{% url 'dairyapp:create-product' %}"
+            });
+
+
+
+
+        });
+
+    </script>
+
+{% endblock %}

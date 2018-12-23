@@ -1,0 +1,103 @@
+{% extends 'dairyapp/base.html' %}
+
+{% load static %}
+
+<!-- This HTML section shows logs of stock records -->
+
+{% block extra-css %}
+<style>
+    .myclass{
+        font-size:large;
+    }
+    .myclass:hover{
+        font-weight: bolder;
+    }
+</style>
+
+{% endblock %}
+
+{% block main-content %}
+    <div class="row">
+
+        <div class="col-lg-5">
+            <h2><strong>Stock Logs</strong></h2>
+
+            <table class="table table-striped table-hover">
+                    <thead>
+                      <tr class="info">
+                        <th>Date</th>
+                        <th>Product</th>
+                        <th>Quantity Added</th>
+
+
+                      </tr>
+                    </thead>
+                    <tbody class="active bg-success">
+                    {% for s in stock %}
+                      <tr class="myclass">
+                        <td>{{s.mStock_date | date:"Y-m-d"}} </td>
+                        <td>{{ s.mStock_product }}</td>
+                        <td>{{ s.mStock_qty }} {{ m.mProduct_qtyunit }}</td>
+
+
+                      </tr>
+                    {% endfor %}
+
+                    </tbody>
+            </table>
+
+            <!--pagination starts here -->
+            {% if stock.has_other_pages %}
+                <ul class="pagination">
+                    {% if stock.has_previous %}
+                        <li>
+                            <a href="?page={{ stock.previous_page_number }}">&laquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <span>&laquo;</span>
+                        </li>
+                    {% endif %}
+                    {% for i in stock.paginator.page_range %}
+                        {% if sales.number == i %}
+                            <li class="active">
+                                <span>{{ i }}
+                                <span class="sr-only">(current)</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="?page={{ i }}">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if stock.has_next %}
+                        <li>
+                            <a href="?page={{ stock.next_page_number }}">&raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <span>&raquo;</span>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            {% endif %}
+            <!--pagination ends here -->
+
+        </div>
+        <div class="col-lg-7">
+            <!-- This section shows production vs time analytics graph -->
+            <h2><strong>Analytics (Production vs Time Graph)</strong></h2>
+
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block extra-js %}
+
+
+{% endblock %}
