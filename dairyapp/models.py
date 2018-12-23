@@ -48,19 +48,6 @@ class mProduct(models.Model):
         return self.mProduct_name
 
 
-
-
-# Feeder Product
-class feederProduct(models.Model):
-    feederProduct_id=models.AutoField(primary_key=True)
-    feederProduct_name=models.CharField(max_length=25)
-    #feederProduct_qty=models.FloatField()
-    feederProduct_qtyunit=models.CharField(max_length=5)
-    #feederProduct_rate=models.FloatField()
-
-    def __str__(self):
-        return self.feederProduct_name
-
 ##milk purchase
 class mPurchase(models.Model):
 
