@@ -33,6 +33,8 @@ DATABASES = {
 
 ```
 [Help](https://django-mssql.readthedocs.io/en/latest/settings.html)
+
+
 4. Finally goto the cloned directory and execute:
 ```shell
 python3 manage.py runserver
